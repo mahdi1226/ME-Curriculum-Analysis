@@ -717,20 +717,14 @@ function renderSchool(schoolKey) {
     const school = schools[schoolKey];
     g.selectAll('*').remove();
 
-    // Filter courses
-    const courses = school.courses.filter(c => activeCategories.has(c.cat));
-    const courseIds = new Set(courses.map(c => c.id));
-
-    // Layout: organize by semester (columns) and position within semester
-    const semGroups = {};
-    courses.forEach(c => {
-        if (!semGroups[c.sem]) semGroups[c.sem] = [];
-        semGroups[c.sem].push(c);
+    // Compute FIXED positions for ALL courses (never changes with filters)
+    const allSemGroups = {};
+    school.courses.forEach(c => {
+        if (!allSemGroups[c.sem]) allSemGroups[c.sem] = [];
+        allSemGroups[c.sem].push(c);
     });
-
-    // Position nodes
     const positions = {};
-    Object.entries(semGroups).forEach(([sem, group]) => {
+    Object.entries(allSemGroups).forEach(([sem, group]) => {
         const semIdx = parseInt(sem) - 1;
         group.forEach((c, i) => {
             positions[c.id] = {
@@ -739,6 +733,10 @@ function renderSchool(schoolKey) {
             };
         });
     });
+
+    // Filter courses for visibility (positions stay fixed)
+    const courses = school.courses.filter(c => activeCategories.has(c.cat));
+    const courseIds = new Set(courses.map(c => c.id));
 
     // Draw semester labels
     const semLabels = ['Year 1\nFall', 'Year 1\nSpring', 'Year 2\nFall', 'Year 2\nSpring', 'Year 3\nFall', 'Year 3\nSpring', 'Year 4\nFall', 'Year 4\nSpring'];
