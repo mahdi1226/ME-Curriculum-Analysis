@@ -56,6 +56,22 @@ Edge attributes: `type` (prerequisite / corequisite)
 - Modernize computing course to Python + data science + ML concepts
 - Add AI/ML content to manufacturing, CFD, and controls courses
 
+## Course Graph Color Legend
+
+| Color | Category | Description |
+|-------|----------|-------------|
+| Orange | Mathematics | Calculus I-III, Differential Equations, Statistics |
+| Purple | Physics | Physics I (Mechanics), Physics II (E&M) |
+| Green | Chemistry | General Chemistry for Engineering |
+| Blue | Engineering Core | Statics, Dynamics, Mechanics of Materials, Thermodynamics |
+| Red/Coral | ME Core | Fluids, Heat Transfer, Controls, Machine Design, Materials, Instrumentation |
+| Pink | ME Advanced/Elective | Composites, CFD, Renewable Energy, Advanced Manufacturing |
+| Light Blue | Electrical/CS | Circuit Analysis, Intro to Computing |
+| Gray | General Education | English, Ethics, History, Humanities, Social Sciences |
+| Gold/Yellow | Capstone/Design | Senior Design I & II |
+
+**Line styles:** Solid lines = prerequisites, Dashed lines = co-requisites
+
 ## Research Foundation
 
 This analysis draws on:
