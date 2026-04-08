@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://gexf.net/1.3" version="1.3">
+  <meta lastmodifieddate="2026-04-07">
+    <creator>Missouri S&amp;T ME Program Analysis</creator>
+    <description>Missouri S&amp;T Mechanical Engineering prerequisite graph</description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="name" type="string"/>
+      <attribute id="1" title="credits" type="integer"/>
+      <attribute id="2" title="category" type="string"/>
+      <attribute id="3" title="semester" type="integer"/>
+      <attribute id="4" title="year" type="integer"/>
+      <attribute id="5" title="season" type="string"/>
+    </attributes>
+    <attributes class="edge" mode="static">
+      <attribute id="0" title="type" type="string"/>
+    </attributes>
+    <nodes>
+      <!-- Year 1 Fall -->
+      <node id="FRENG1100" label="FR ENG 1100">
+        <attvalues><attvalue for="0" value="Freshman Engineering"/><attvalue for="1" value="1"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="CHEM1305" label="CHEM 1305">
+        <attvalues><attvalue for="0" value="General Chemistry"/><attvalue for="1" value="4"/><attvalue for="2" value="chemistry"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGLISH1120" label="ENGLISH 1120">
+        <attvalues><attvalue for="0" value="Composition I"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="GE_SS1" label="Social Science">
+        <attvalues><attvalue for="0" value="History/Pol Sci Social Science"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MATH1214" label="MATH 1214">
+        <attvalues><attvalue for="0" value="Calculus I"/><attvalue for="1" value="4"/><attvalue for="2" value="math"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="GE_ELEC1" label="Gen Ed Elective 1">
+        <attvalues><attvalue for="0" value="General Education Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 1 Spring -->
+      <node id="MECHENG1720" label="MECH ENG 1720">
+        <attvalues><attvalue for="0" value="Introduction to Engineering Design"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="PHYSICS1135" label="PHYSICS 1135">
+        <attvalues><attvalue for="0" value="Engineering Physics I"/><attvalue for="1" value="4"/><attvalue for="2" value="physics"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MATH1215" label="MATH 1215">
+        <attvalues><attvalue for="0" value="Calculus II"/><attvalue for="1" value="4"/><attvalue for="2" value="math"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="CHEM1319" label="CHEM 1319">
+        <attvalues><attvalue for="0" value="Engineering Chemistry Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="chemistry"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_ELEC2" label="Gen Ed Elective 2">
+        <attvalues><attvalue for="0" value="General Education Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 2 Fall -->
+      <node id="MATH2222" label="MATH 2222">
+        <attvalues><attvalue for="0" value="Calculus III"/><attvalue for="1" value="4"/><attvalue for="2" value="math"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="CIVENG2200" label="CIV ENG 2200">
+        <attvalues><attvalue for="0" value="Statics"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="PHYSICS2135" label="PHYSICS 2135">
+        <attvalues><attvalue for="0" value="Engineering Physics II"/><attvalue for="1" value="4"/><attvalue for="2" value="physics"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MECHENG2653" label="MECH ENG 2653">
+        <attvalues><attvalue for="0" value="Introduction to Manufacturing Processes"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MECHENG1761" label="MECH ENG 1761">
+        <attvalues><attvalue for="0" value="Introduction to CAD"/><attvalue for="1" value="1"/><attvalue for="2" value="me_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 2 Spring -->
+      <node id="MECHENG2761" label="MECH ENG 2761">
+        <attvalues><attvalue for="0" value="Introduction to Mechanical Design"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG2519" label="MECH ENG 2519">
+        <attvalues><attvalue for="0" value="Thermodynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG2360" label="MECH ENG 2360">
+        <attvalues><attvalue for="0" value="Dynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MATH3304" label="MATH 3304">
+        <attvalues><attvalue for="0" value="Differential Equations"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="METENG2110" label="MET ENG 2110">
+        <attvalues><attvalue for="0" value="Materials Science"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="PROG_ELEC" label="Programming Elective">
+        <attvalues><attvalue for="0" value="Programming (CS 1570/1580 etc.)"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 3 Fall -->
+      <node id="MECHENG3313" label="MECH ENG 3313">
+        <attvalues><attvalue for="0" value="Machine Dynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MECHENG3521" label="MECH ENG 3521">
+        <attvalues><attvalue for="0" value="Applied Thermodynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ELECENG2800" label="ELEC ENG 2800">
+        <attvalues><attvalue for="0" value="Electrical Circuits"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="CIVENG2210" label="CIV ENG 2210">
+        <attvalues><attvalue for="0" value="Stress Analysis"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="CIVENG2211" label="CIV ENG 2211">
+        <attvalues><attvalue for="0" value="Stress Analysis Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ADV_MATH" label="Adv Math/Stat Elective">
+        <attvalues><attvalue for="0" value="Advanced Math or Statistics Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 3 Spring -->
+      <node id="MECHENG3411" label="MECH ENG 3411">
+        <attvalues><attvalue for="0" value="Modeling &amp; Analysis of Dynamic Systems"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG3131" label="MECH ENG 3131">
+        <attvalues><attvalue for="0" value="Thermofluid Mechanics I"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG4840" label="MECH ENG 4840">
+        <attvalues><attvalue for="0" value="Mechanical Instrumentation"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG3708" label="MECH ENG 3708">
+        <attvalues><attvalue for="0" value="Machine Design I"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG3525" label="MECH ENG 3525">
+        <attvalues><attvalue for="0" value="Heat Transfer"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="COMM_ELEC" label="Communication Elective">
+        <attvalues><attvalue for="0" value="Communication Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 4 Fall -->
+      <node id="MECHENG4842" label="MECH ENG 4842">
+        <attvalues><attvalue for="0" value="Mechanical Engineering Systems"/><attvalue for="1" value="2"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MECHENG4479" label="MECH ENG 4479">
+        <attvalues><attvalue for="0" value="Automatic Control of Dynamic Systems"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MECHENG4761" label="MECH ENG 4761">
+        <attvalues><attvalue for="0" value="Engineering Design (Capstone)"/><attvalue for="1" value="3"/><attvalue for="2" value="capstone"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ME_TECH1" label="ME Technical Elective 1">
+        <attvalues><attvalue for="0" value="ME/Aero 5000-level Technical Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="TECH_ELEC1" label="Technical Elective">
+        <attvalues><attvalue for="0" value="ME/Aero Technical Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="GE_ELEC3" label="Gen Ed Elective 3">
+        <attvalues><attvalue for="0" value="General Education Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 4 Spring -->
+      <node id="ENGMGT1100" label="ENG MGT 1100">
+        <attvalues><attvalue for="0" value="Practical Concepts for Technical Managers"/><attvalue for="1" value="1"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="ENGMGT1210" label="ENG MGT 1210">
+        <attvalues><attvalue for="0" value="Engineering Management"/><attvalue for="1" value="2"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MECHENG4480" label="MECH ENG 4480">
+        <attvalues><attvalue for="0" value="Control System Laboratory"/><attvalue for="1" value="1"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="ME_TECH2" label="ME Technical Elective 2">
+        <attvalues><attvalue for="0" value="Advanced ME 5000-level Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="BREADTH_ELEC" label="Breadth Elective">
+        <attvalues><attvalue for="0" value="Non-Engineering Breadth Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_ELEC4" label="Gen Ed Elective 4">
+        <attvalues><attvalue for="0" value="General Education Elective"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <!-- Math chain -->
+      <edge id="e1" source="MATH1214" target="MATH1215" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e2" source="MATH1215" target="MATH2222" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e3" source="MATH2222" target="MATH3304" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Physics chain -->
+      <edge id="e4" source="MATH1214" target="PHYSICS1135" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e5" source="PHYSICS1135" target="PHYSICS2135" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e6" source="MATH1215" target="PHYSICS2135" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Chemistry Lab -->
+      <edge id="e7" source="CHEM1305" target="CHEM1319" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Statics: PHYSICS 1135 (C or better), MATH 2222 (concurrent OK) -->
+      <edge id="e8" source="PHYSICS1135" target="CIVENG2200" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e9" source="MATH2222" target="CIVENG2200" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- CAD: MECH ENG 1720, MATH 1214 -->
+      <edge id="e10" source="MECHENG1720" target="MECHENG1761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e11" source="MATH1214" target="MECHENG1761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Manufacturing: MECH ENG 1720, PHYSICS 1135 (C); coreq MECH ENG 1761 -->
+      <edge id="e12" source="MECHENG1720" target="MECHENG2653" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e13" source="PHYSICS1135" target="MECHENG2653" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e14" source="MECHENG1761" target="MECHENG2653" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Intro Mech Design: MECH ENG 1720, 1761, 2653; MATH 1214, PHYSICS 1135; coreq CIV ENG 2200 -->
+      <edge id="e15" source="MECHENG1720" target="MECHENG2761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e16" source="MECHENG1761" target="MECHENG2761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e17" source="MECHENG2653" target="MECHENG2761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e18" source="MATH1214" target="MECHENG2761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e19" source="PHYSICS1135" target="MECHENG2761" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e20" source="CIVENG2200" target="MECHENG2761" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Thermodynamics: MATH 1214, 1215, 2222 (all C), PHYSICS 1135 (C) -->
+      <edge id="e21" source="MATH1214" target="MECHENG2519" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e22" source="MATH1215" target="MECHENG2519" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e23" source="MATH2222" target="MECHENG2519" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e24" source="PHYSICS1135" target="MECHENG2519" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Dynamics: CIV ENG 2200 (C), MATH 2222 (C) -->
+      <edge id="e25" source="CIVENG2200" target="MECHENG2360" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e26" source="MATH2222" target="MECHENG2360" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Materials Science: CHEM 1305, PHYSICS 1135 -->
+      <edge id="e27" source="CHEM1305" target="METENG2110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e28" source="PHYSICS1135" target="METENG2110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Machine Dynamics: Programming (C), MECH ENG 2360 (C), MATH chain, PHYSICS 1135 -->
+      <edge id="e29" source="PROG_ELEC" target="MECHENG3313" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e30" source="MECHENG2360" target="MECHENG3313" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e31" source="MATH2222" target="MECHENG3313" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Applied Thermo: MECH ENG 2519 (C) -->
+      <edge id="e32" source="MECHENG2519" target="MECHENG3521" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Electrical Circuits: PHYSICS 2135, MATH 2222 -->
+      <edge id="e33" source="PHYSICS2135" target="ELECENG2800" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e34" source="MATH2222" target="ELECENG2800" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Stress Analysis: CIV ENG 2200 (C), MATH 2222 -->
+      <edge id="e35" source="CIVENG2200" target="CIVENG2210" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e36" source="MATH2222" target="CIVENG2210" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Stress Analysis Lab: CIV ENG 2200; coreq CIV ENG 2210 -->
+      <edge id="e37" source="CIVENG2200" target="CIVENG2211" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e38" source="CIVENG2210" target="CIVENG2211" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Modeling & Analysis of Dynamic Systems: Programming (C), MECH ENG 2360 (C), MATH chain + 3304, PHYSICS 1135+2135 -->
+      <edge id="e39" source="PROG_ELEC" target="MECHENG3411" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e40" source="MECHENG2360" target="MECHENG3411" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e41" source="MATH3304" target="MECHENG3411" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e42" source="PHYSICS2135" target="MECHENG3411" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Thermofluid Mechanics I: MECH ENG 2519 (C) -->
+      <edge id="e43" source="MECHENG2519" target="MECHENG3131" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Mechanical Instrumentation: MATH 3304 (C), MECH ENG 2519 (C), PHYSICS 2135 (C) -->
+      <edge id="e44" source="MATH3304" target="MECHENG4840" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e45" source="MECHENG2519" target="MECHENG4840" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e46" source="PHYSICS2135" target="MECHENG4840" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Machine Design I: MECH ENG 2653, MET ENG 2110, CIV ENG 2210 (C); coreq MECH ENG 2761 -->
+      <edge id="e47" source="MECHENG2653" target="MECHENG3708" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e48" source="METENG2110" target="MECHENG3708" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e49" source="CIVENG2210" target="MECHENG3708" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e50" source="MECHENG2761" target="MECHENG3708" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Heat Transfer: Programming (C), MATH 3304 (C), MECH ENG 2519 (C) -->
+      <edge id="e51" source="PROG_ELEC" target="MECHENG3525" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e52" source="MATH3304" target="MECHENG3525" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e53" source="MECHENG2519" target="MECHENG3525" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- ME Systems: MECH ENG 4840, 3521, 3131, 3525, 3313 -->
+      <edge id="e54" source="MECHENG4840" target="MECHENG4842" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e55" source="MECHENG3521" target="MECHENG4842" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e56" source="MECHENG3131" target="MECHENG4842" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e57" source="MECHENG3525" target="MECHENG4842" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e58" source="MECHENG3313" target="MECHENG4842" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Automatic Control: MECH ENG 3411 (C) -->
+      <edge id="e59" source="MECHENG3411" target="MECHENG4479" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Capstone (Engineering Design): coreq MECH ENG 3708, 3525, 3131, 4479 -->
+      <edge id="e60" source="MECHENG3708" target="MECHENG4761" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e61" source="MECHENG3525" target="MECHENG4761" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e62" source="MECHENG3131" target="MECHENG4761" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e63" source="MECHENG4479" target="MECHENG4761" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Control System Lab: coreq MECH ENG 4479 -->
+      <edge id="e64" source="MECHENG4479" target="MECHENG4480" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+    </edges>
+  </graph>
+</gexf>

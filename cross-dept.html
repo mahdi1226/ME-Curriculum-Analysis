@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Department Shared Courses - UMSL Engineering</title>
+    <link rel="stylesheet" href="nav.css">
+    <style>
+        /* Color legend for graph nodes */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+        .legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        /* Shared course matrix table */
+        .matrix-table td.check {
+            text-align: center;
+            font-size: 18px;
+            color: #1a7f37;
+            font-weight: 700;
+        }
+        .matrix-table .group-header td {
+            background: #f6f8fa;
+            font-weight: 700;
+            color: #24292f;
+            border-top: 2px solid #d1d9e0;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .matrix-table td.credits {
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Dependency graph */
+        .dep-graph {
+            overflow-x: auto;
+            padding: 24px 0;
+        }
+        .graph-container {
+            position: relative;
+            min-width: 900px;
+        }
+        .graph-level {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 0;
+            position: relative;
+            flex-wrap: wrap;
+        }
+        .graph-node {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            border: 2px solid rgba(0,0,0,0.12);
+            min-width: 90px;
+            position: relative;
+            z-index: 2;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .graph-node .node-title {
+            font-size: 10px;
+            font-weight: 400;
+            display: block;
+            opacity: 0.8;
+        }
+        /* Node color classes */
+        .node-all    { background: #fef3c7; border-color: #d4a017; color: #78350f; }
+        .node-me-ce  { background: #dbeafe; border-color: #3b82f6; color: #1e3a5f; }
+        .node-me-ee  { background: #cffafe; border-color: #06b6d4; color: #164e63; }
+        .node-me     { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+        .node-ce     { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+        .node-ee     { background: #f3e8ff; border-color: #a855f7; color: #3b0764; }
+
+        /* SVG lines */
+        .graph-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .graph-svg line {
+            stroke: #b0b8c4;
+            stroke-width: 1.5;
+        }
+
+        /* Level spacers */
+        .level-spacer {
+            height: 40px;
+        }
+
+        /* Summary stat boxes */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-box {
+            background: #f6f8fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-box .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0969da;
+        }
+        .stat-box .stat-label {
+            font-size: 12px;
+            color: #656d76;
+            margin-top: 4px;
+        }
+
+        /* Comparison table highlights */
+        .cmp-umsl { background: #ddf4ff; }
+        .cmp-siue { background: #fff8c5; }
+    </style>
+</head>
+<body>
+<script src="nav.js"></script>
+<script>createNav('cross-dept');</script>
+
+<div class="page-container">
+    <h1 class="page-title">Cross-Department Shared Courses</h1>
+    <p>Analysis of shared foundational courses across UMSL's three engineering programs: Mechanical Engineering (ME), Electrical Engineering (EE), and Civil Engineering (CE).</p>
+
+    <!-- Table of Contents -->
+    <div class="page-toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#matrix">Shared Course Matrix</a></li>
+            <li><a href="#graph">Visual Dependency Graph</a></li>
+            <li><a href="#resources">Resource Implications</a></li>
+            <li><a href="#siue-comparison">Comparison with SIUE</a></li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 1: Overview -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="overview">Overview</h2>
+
+    <p>
+        UMSL's School of Engineering offers three undergraduate programs: Mechanical Engineering (ME),
+        Electrical Engineering (EE), and Civil Engineering (CE). As a newly established school (2025),
+        these programs share a substantial common foundation, which is typical of ABET-accredited
+        engineering curricula.
+    </p>
+    <p>Understanding this shared structure is important for:</p>
+    <ul>
+        <li><strong>Resource efficiency</strong> -- one section of a shared course serves students from multiple programs</li>
+        <li><strong>Faculty planning</strong> -- identifying who teaches shared vs. department-specific courses</li>
+        <li><strong>Student flexibility</strong> -- students who switch majors in Year 1 or Year 2 lose minimal progress</li>
+        <li><strong>Scheduling</strong> -- shared courses require more sections due to higher enrollment across programs</li>
+    </ul>
+
+    <div class="stat-grid">
+        <div class="stat-box">
+            <div class="stat-number">~53</div>
+            <div class="stat-label">Credits shared by all 3 programs</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">9</div>
+            <div class="stat-label">Credits shared ME + CE only</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Credits shared ME + EE only</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">~44</div>
+            <div class="stat-label">ME-specific credits</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 2: Shared Course Matrix -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="matrix">Shared Course Matrix</h2>
+
+    <p>Rows represent individual courses; columns indicate which program requires the course. Courses are grouped by sharing category.</p>
+
+    <table class="matrix-table">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Title</th>
+                <th style="text-align:center;">Cr</th>
+                <th style="text-align:center;">ME</th>
+                <th style="text-align:center;">EE</th>
+                <th style="text-align:center;">CE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Group: Shared by ALL THREE -->
+            <tr class="group-header"><td colspan="6">Shared by All Three Programs (ME + EE + CE) -- ~53 credits</td></tr>
+            <tr><td>MATH 1800</td><td>Analytic Geometry and Calculus I</td><td class="credits">5</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>MATH 1900</td><td>Analytic Geometry and Calculus II</td><td class="credits">5</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>MATH 2000</td><td>Analytic Geometry and Calculus III</td><td class="credits">5</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>MATH 2020</td><td>Introduction to Differential Equations</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>MATH 1320</td><td>Probability and Statistics</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>PHYS 2111/L</td><td>Physics: Mechanics and Heat + Lab</td><td class="credits">5</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>PHYS 2112/L</td><td>Physics: Electricity, Magnetism, Optics + Lab</td><td class="credits">5</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>CHEM XXXX</td><td>General Chemistry for Engineering</td><td class="credits">4</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGL 1100</td><td>First-Year Writing</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGL 3130</td><td>Technical Writing</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>CMP SCI 1250</td><td>Introduction to Computing</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGR 1414</td><td>Elementary Engineering Design</td><td class="credits">2</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGR 2022</td><td>Engineering Economics and Project Management</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>PHIL 2259</td><td>Engineering Ethics</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGR 4400</td><td>FE Exam Review</td><td class="credits">1</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+
+            <!-- Group: ME + CE only -->
+            <tr class="group-header"><td colspan="6">Shared by ME + CE Only -- 9 credits</td></tr>
+            <tr><td>ENGR 2310</td><td>Statics</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGR 2320</td><td>Dynamics</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td class="check">&#10003;</td></tr>
+            <tr><td>ENGR 2332</td><td>Mechanics of Materials</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td class="check">&#10003;</td></tr>
+
+            <!-- Group: ME + EE only -->
+            <tr class="group-header"><td colspan="6">Shared by ME + EE Only -- 3 credits</td></tr>
+            <tr><td>EENG 2310</td><td>Circuit Analysis I</td><td class="credits">3</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td></td></tr>
+
+            <!-- Group: ME-specific -->
+            <tr class="group-header"><td colspan="6">ME-Specific Courses -- ~44 credits</td></tr>
+            <tr><td>MENG 1204</td><td>Mechanical Engineering 3D Design</td><td class="credits">2</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>ENGR 2330</td><td>Introduction to Thermodynamics</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>ENGR 3300</td><td>Applied Thermodynamics</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3330</td><td>Instrumentation and Measurement</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3340</td><td>Properties of Material and Testing</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3350/L</td><td>System Dynamics and Control + Lab</td><td class="credits">4</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3360</td><td>Machine Design and Manufacturing</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3370/L</td><td>Fluid Mechanics + Lab</td><td class="credits">4</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3380/L</td><td>Heat Transfer + Lab</td><td class="credits">4</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 3390</td><td>Product Development and Prototyping Lab</td><td class="credits">1</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4440</td><td>Introduction to Composite Materials</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4450</td><td>Computational Fluid Dynamics</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4460</td><td>Renewable Energy Systems Laboratory</td><td class="credits">1</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4490</td><td>Advanced Manufacturing</td><td class="credits">3</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4980</td><td>Senior Design I (Capstone)</td><td class="credits">2</td><td class="check">&#10003;</td><td></td><td></td></tr>
+            <tr><td>MENG 4990</td><td>Senior Design II (Capstone)</td><td class="credits">2</td><td class="check">&#10003;</td><td></td><td></td></tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- Section 3: Visual Dependency Graph -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="graph">Visual Dependency Graph</h2>
+
+    <p>This graph traces the prerequisite flow from foundational mathematics through shared engineering courses into ME-specific coursework. Nodes are color-coded by sharing category.</p>
+
+    <div class="legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:#fef3c7;border-color:#d4a017;"></span> Shared by all 3</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#dbeafe;border-color:#3b82f6;"></span> ME + CE</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#cffafe;border-color:#06b6d4;"></span> ME + EE</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#fee2e2;border-color:#ef4444;"></span> ME only</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#dcfce7;border-color:#22c55e;"></span> CE only</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#f3e8ff;border-color:#a855f7;"></span> EE only</span>
+    </div>
+
+    <div class="dep-graph" id="dep-graph">
+        <div class="graph-container" id="graph-container">
+            <!-- Level 0 -->
+            <div class="graph-level" data-level="0">
+                <div class="graph-node node-all" id="n-math1800">MATH 1800<span class="node-title">Calculus I</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 1 -->
+            <div class="graph-level" data-level="1">
+                <div class="graph-node node-all" id="n-math1900">MATH 1900<span class="node-title">Calculus II</span></div>
+                <div class="graph-node node-all" id="n-phys2111">PHYS 2111/L<span class="node-title">Physics I</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 2 -->
+            <div class="graph-level" data-level="2">
+                <div class="graph-node node-all" id="n-math2000">MATH 2000<span class="node-title">Calculus III</span></div>
+                <div class="graph-node node-all" id="n-phys2112">PHYS 2112/L<span class="node-title">Physics II</span></div>
+                <div class="graph-node node-me-ce" id="n-engr2310">ENGR 2310<span class="node-title">Statics</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 3 -->
+            <div class="graph-level" data-level="3">
+                <div class="graph-node node-all" id="n-math2020">MATH 2020<span class="node-title">Diff. Equations</span></div>
+                <div class="graph-node node-me-ee" id="n-eeng2310">EENG 2310<span class="node-title">Circuit Analysis I</span></div>
+                <div class="graph-node node-me-ce" id="n-engr2320">ENGR 2320<span class="node-title">Dynamics</span></div>
+                <div class="graph-node node-me-ce" id="n-engr2332">ENGR 2332<span class="node-title">Mech. of Materials</span></div>
+                <div class="graph-node node-me" id="n-engr2330">ENGR 2330<span class="node-title">Thermodynamics</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 4 -->
+            <div class="graph-level" data-level="4">
+                <div class="graph-node node-me" id="n-meng3370">MENG 3370/L<span class="node-title">Fluid Mechanics</span></div>
+                <div class="graph-node node-me" id="n-meng3330">MENG 3330<span class="node-title">Instrumentation</span></div>
+                <div class="graph-node node-me" id="n-meng3350">MENG 3350/L<span class="node-title">Sys. Dynamics &amp; Ctrl</span></div>
+                <div class="graph-node node-me" id="n-meng3340">MENG 3340<span class="node-title">Materials &amp; Testing</span></div>
+                <div class="graph-node node-me" id="n-meng3360">MENG 3360<span class="node-title">Machine Design</span></div>
+                <div class="graph-node node-me" id="n-engr3300">ENGR 3300<span class="node-title">Applied Thermo</span></div>
+                <div class="graph-node node-me" id="n-meng3390">MENG 3390<span class="node-title">Prototyping Lab</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 5 -->
+            <div class="graph-level" data-level="5">
+                <div class="graph-node node-me" id="n-meng3380">MENG 3380/L<span class="node-title">Heat Transfer</span></div>
+                <div class="graph-node node-me" id="n-meng4440">MENG 4440<span class="node-title">Composites</span></div>
+                <div class="graph-node node-me" id="n-meng4490">MENG 4490<span class="node-title">Adv. Manufacturing</span></div>
+                <div class="graph-node node-me" id="n-meng4460">MENG 4460<span class="node-title">Renewable Energy</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 6 -->
+            <div class="graph-level" data-level="6">
+                <div class="graph-node node-me" id="n-meng4980">MENG 4980<span class="node-title">Senior Design I</span></div>
+                <div class="graph-node node-me" id="n-meng4450">MENG 4450<span class="node-title">CFD</span></div>
+            </div>
+            <div class="level-spacer"></div>
+
+            <!-- Level 7 -->
+            <div class="graph-level" data-level="7">
+                <div class="graph-node node-me" id="n-meng4990">MENG 4990<span class="node-title">Senior Design II</span></div>
+            </div>
+
+            <!-- SVG overlay for edges -->
+            <svg class="graph-svg" id="graph-svg"></svg>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 4: Resource Implications -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="resources">Resource Implications</h2>
+
+    <div class="card-grid">
+        <div class="card card-highlight">
+            <h3>Faculty Needs</h3>
+            <ul>
+                <li><strong>Shared courses (Math, Physics, Chemistry, English):</strong> Taught by existing UMSL departments -- no new engineering faculty needed.</li>
+                <li><strong>Shared engineering courses (Statics, Dynamics, Mechanics of Materials):</strong> Need 2-3 engineering faculty who can teach across ME and CE.</li>
+                <li><strong>ME-specific courses:</strong> Need 4-5 ME faculty covering thermal sciences, mechanical design, controls, manufacturing, and materials.</li>
+                <li><strong>AI and modern topics:</strong> Need 1-2 faculty with computational and AI expertise for emerging course content.</li>
+            </ul>
+        </div>
+
+        <div class="card card-highlight">
+            <h3>Scheduling Considerations</h3>
+            <ul>
+                <li>Shared courses need <strong>multiple sections</strong> since they serve students from all 3 programs simultaneously.</li>
+                <li>Year 1-2 courses (calculus, physics, statics) have the <strong>highest enrollment</strong> and need the most sections.</li>
+                <li>ME-specific courses (Year 3-4) have <strong>lower enrollment</strong> and can typically run as single sections.</li>
+                <li>Careful scheduling avoids conflicts between required courses in the same semester.</li>
+            </ul>
+        </div>
+
+        <div class="card card-success">
+            <h3>Student Flexibility</h3>
+            <ul>
+                <li><strong>ME to CE (or CE to ME):</strong> Students can switch up to the end of Year 2 with minimal course loss, since 53 + 9 = 62 shared credits overlap.</li>
+                <li><strong>ME to EE (or EE to ME):</strong> Students can switch up to the end of Year 1 with minimal loss, since 53 + 3 = 56 shared credits overlap but mechanics courses diverge in Year 2.</li>
+                <li><strong>After Year 2 Spring:</strong> Switching departments requires significant additional coursework because department-specific branches have diverged.</li>
+            </ul>
+        </div>
+
+        <div class="card card-warning">
+            <h3>Bottleneck Courses</h3>
+            <ul>
+                <li><strong>MATH 1800 (Calculus I):</strong> Root prerequisite for nearly every engineering course. Delays here cascade through the entire curriculum.</li>
+                <li><strong>ENGR 2310 (Statics):</strong> Gates Dynamics, Mechanics of Materials, and all downstream ME and CE courses.</li>
+                <li><strong>MATH 2020 (Diff. Equations):</strong> Required for Fluid Mechanics, System Dynamics, and Heat Transfer simultaneously.</li>
+                <li><strong>EENG 2310 (Circuit Analysis):</strong> Gates Instrumentation and Applied Thermo for ME students.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 5: Comparison with SIUE -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="siue-comparison">Comparison with SIUE</h2>
+
+    <p>Both UMSL and SIUE serve ME, EE, and CE programs with a large shared foundation. However, the two schools take different approaches to naming and organizing shared courses.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>UMSL</th>
+                <th>SIUE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Shared course naming</td>
+                <td>Uses <strong>ENGR-prefix</strong> for shared courses (e.g., ENGR 2310 = Statics)</td>
+                <td>Uses <strong>cross-listed prefixes</strong> (e.g., CE/ME 240 = Statics)</td>
+            </tr>
+            <tr>
+                <td>Ownership signal</td>
+                <td>ENGR prefix signals shared ownership -- no single department "owns" the course</td>
+                <td>Cross-listing signals joint ownership between named departments</td>
+            </tr>
+            <tr>
+                <td>Mechanics shared courses</td>
+                <td>ENGR 2310 (Statics), ENGR 2320 (Dynamics), ENGR 2332 (Mech. of Materials)</td>
+                <td>CE/ME 240 (Statics), CE/ME 242 (Mech. of Solids), ME 262 (Dynamics)</td>
+            </tr>
+            <tr>
+                <td>Circuits shared course</td>
+                <td>EENG 2310 (Circuit Analysis I) -- ME + EE</td>
+                <td>ECE/ME 210 (Circuits) -- ME + ECE</td>
+            </tr>
+            <tr>
+                <td>Total shared credits</td>
+                <td>~53 credits shared by all 3 programs</td>
+                <td>~50+ credits shared by all 3 programs</td>
+            </tr>
+            <tr>
+                <td>Flexibility advantage</td>
+                <td>ENGR prefix is more flexible -- easier to add a 4th program without renaming</td>
+                <td>Cross-listing is explicit but requires renaming if sharing changes</td>
+            </tr>
+            <tr>
+                <td>Math root course</td>
+                <td>MATH 1800 (Calculus I, 5 credits)</td>
+                <td>MATH 150 (Calculus I, 4 credits)</td>
+            </tr>
+            <tr>
+                <td>Critical bottleneck</td>
+                <td>ENGR 2310 (Statics) gates ME + CE branches</td>
+                <td>CE/ME 240 (Statics) and CE/ME 242 (Mech. of Solids) gate ME + CE branches</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 16px;">
+        <h3>Key Takeaway</h3>
+        <p>
+            Both UMSL and SIUE share a similar structural pattern: a deep math/physics foundation feeds into
+            shared engineering mechanics courses, which then branch into department-specific sequences. UMSL's
+            use of the generic ENGR prefix for shared courses is a more modern and scalable approach compared
+            to SIUE's cross-listed naming convention. Both schools have approximately 50+ shared credits,
+            meaning roughly 40% of any engineering degree consists of courses common to all three programs.
+        </p>
+    </div>
+
+</div><!-- /.page-container -->
+
+<script>
+// Draw prerequisite edges on the dependency graph
+(function() {
+    const edges = [
+        // Level 0 -> 1
+        ['n-math1800', 'n-math1900'],
+        ['n-math1800', 'n-phys2111'],
+        // Level 1 -> 2
+        ['n-math1900', 'n-math2000'],
+        ['n-math1900', 'n-phys2112'],
+        ['n-phys2111', 'n-phys2112'],
+        ['n-math1900', 'n-engr2310'],
+        ['n-phys2111', 'n-engr2310'],
+        // Level 2 -> 3
+        ['n-math2000', 'n-math2020'],
+        ['n-math2000', 'n-eeng2310'],
+        ['n-phys2112', 'n-eeng2310'],
+        ['n-engr2310', 'n-engr2320'],
+        ['n-math2000', 'n-engr2320'],
+        ['n-engr2310', 'n-engr2332'],
+        ['n-math1900', 'n-engr2330'],
+        ['n-phys2112', 'n-engr2330'],
+        // Level 3 -> 4
+        ['n-math2020', 'n-meng3370'],
+        ['n-engr2320', 'n-meng3370'],
+        ['n-engr2330', 'n-meng3370'],
+        ['n-eeng2310', 'n-meng3330'],
+        ['n-math2020', 'n-meng3350'],
+        ['n-engr2320', 'n-meng3350'],
+        ['n-engr2332', 'n-meng3340'],
+        ['n-engr2332', 'n-meng3360'],
+        ['n-eeng2310', 'n-engr3300'],
+        ['n-engr2332', 'n-meng3390'],
+        // Level 4 -> 5
+        ['n-meng3370', 'n-meng3380'],
+        ['n-math2020', 'n-meng3380'],
+        ['n-meng3340', 'n-meng4440'],
+        ['n-meng3390', 'n-meng4490'],
+        ['n-meng3370', 'n-meng4460'],
+        // Level 5 -> 6
+        ['n-meng3360', 'n-meng4980'],
+        ['n-meng3380', 'n-meng4980'],
+        ['n-meng3370', 'n-meng4450'],
+        ['n-meng3380', 'n-meng4450'],
+        // Level 6 -> 7
+        ['n-meng4980', 'n-meng4990'],
+    ];
+
+    function drawEdges() {
+        const svg = document.getElementById('graph-svg');
+        const container = document.getElementById('graph-container');
+        if (!svg || !container) return;
+
+        const rect = container.getBoundingClientRect();
+        svg.setAttribute('width', container.scrollWidth);
+        svg.setAttribute('height', container.scrollHeight);
+        svg.innerHTML = '';
+
+        edges.forEach(function(edge) {
+            const from = document.getElementById(edge[0]);
+            const to = document.getElementById(edge[1]);
+            if (!from || !to) return;
+
+            const fRect = from.getBoundingClientRect();
+            const tRect = to.getBoundingClientRect();
+            const cRect = container.getBoundingClientRect();
+
+            const x1 = fRect.left + fRect.width / 2 - cRect.left;
+            const y1 = fRect.top + fRect.height - cRect.top;
+            const x2 = tRect.left + tRect.width / 2 - cRect.left;
+            const y2 = tRect.top - cRect.top;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            svg.appendChild(line);
+        });
+    }
+
+    // Draw after layout settles
+    window.addEventListener('load', function() {
+        setTimeout(drawEdges, 100);
+    });
+    window.addEventListener('resize', drawEdges);
+})();
+</script>
+
+</body>
+</html>

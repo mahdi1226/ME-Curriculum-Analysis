@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEEP Critical Path Analysis - UMSL ME</title>
+    <link rel="stylesheet" href="nav.css">
+    <script src="nav.js"></script>
+    <style>
+        .chain-visual {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+        .chain-node {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .chain-node.math { background: #fff3e0; color: #e65100; border: 1px solid #ffcc02; }
+        .chain-node.phys { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+        .chain-node.engr { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+        .chain-node.me { background: #ffebee; color: #b71c1c; border: 1px solid #ef9a9a; }
+        .chain-node.cap { background: #fff8e1; color: #6d4c00; border: 1px solid #ffd54f; }
+        .chain-arrow { color: #656d76; font-size: 18px; font-weight: bold; }
+        .bottleneck-meter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+        .bottleneck-bar {
+            height: 16px;
+            border-radius: 3px;
+            background: #cf222e;
+            opacity: 0.8;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 16px 0;
+        }
+        @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<script>createNav('deep');</script>
+
+<div class="page-container">
+    <h1 class="page-title">DEEP Critical Path Analysis</h1>
+    <p>Applying the DEEP project methodology to analyze and improve UMSL's ME curriculum structure.</p>
+
+    <div class="page-toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#about">About the DEEP Project</a></li>
+            <li><a href="#findings">Key Findings</a></li>
+            <li><a href="#clusters">Cluster Characteristics</a></li>
+            <li><a href="#distribution">Topic Distribution</a></li>
+            <li><a href="#umsl-paths">UMSL Critical Paths</a></li>
+            <li><a href="#flexibility">Flexibility &amp; Bottlenecks</a></li>
+            <li><a href="#recommendations">Recommendations</a></li>
+            <li><a href="#comparison">Traditional vs. DEEP</a></li>
+        </ul>
+    </div>
+
+    <!-- Section 1 -->
+    <h2 class="section-title section-anchor" id="about">About the DEEP Project</h2>
+    <div class="card card-highlight">
+        <p><strong>Citation:</strong> Busch-Vishniac, I. et al. (2011). "Deconstructing Engineering Education Programmes: The DEEP Project to reform the mechanical engineering curriculum." <em>European Journal of Engineering Education</em>, 36(3), 269&ndash;283. DOI: 10.1080/03043797.2011.579590</p>
+    </div>
+    <p>The DEEP project aimed to revise the standard ME undergraduate curriculum to attract and retain a more diverse community of students. The team included faculty from 8 universities (Cal State LA, Michigan State, Howard, Tuskegee, Stevens Institute, U. of Washington, Smith College, and Johns Hopkins) plus MIT as a reference.</p>
+    <h3>Methodology</h3>
+    <ol>
+        <li><strong>Dissect syllabi</strong> from partner institutions into individual topics &mdash; produced 833 unique topics</li>
+        <li><strong>Define prerequisite relationships</strong> between topics (not courses) &mdash; topic-level granularity</li>
+        <li><strong>Apply genetic algorithm</strong> to cluster topics into groups that minimize cross-cluster dependencies</li>
+        <li><strong>Result:</strong> 12 clusters (A&ndash;L), each roughly equivalent to a full-year course (~84 instruction hours)</li>
+    </ol>
+    <p>The key insight: by working at the <em>topic</em> level rather than the <em>course</em> level, prerequisite chains can be shortened significantly, giving students more scheduling flexibility.</p>
+
+    <!-- Section 2 -->
+    <h2 class="section-title section-anchor" id="findings">Key Findings</h2>
+    <div class="card-grid">
+        <div class="card card-highlight">
+            <h3>Low Standardization</h3>
+            <p>Of ~1,000 topics across 9 programs, <strong>only 70 were common to the majority</strong>. ME programs are far less standardized than assumed. The body of knowledge considered necessary is actually small enough to fit into a four-year program.</p>
+        </div>
+        <div class="card card-highlight">
+            <h3>Reduced Dependencies</h3>
+            <p>The genetic algorithm reduced cross-cluster dependencies from <strong>988 to 334 links</strong> (158 prerequisite + 176 successor cross-topic links). This is a 66% reduction in inter-course coupling.</p>
+        </div>
+        <div class="card card-highlight">
+            <h3>Mixed Subdiscipline Clusters</h3>
+            <p>The 12 clusters <strong>mix topics from different traditional subdisciplines</strong> (e.g., thermodynamics + kinematics in the same cluster). This is a fundamental departure from traditional course organization where each course = one subdiscipline.</p>
+        </div>
+        <div class="card card-highlight">
+            <h3>Entry Flexibility</h3>
+            <p>Setting a maximum of <strong>7 cross-cluster links</strong> gives enough flexibility for a 4-year program with Year 2 entry possible. At 8 links max, students entering a year late could finish in 3 engineering-intensive years.</p>
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <h2 class="section-title section-anchor" id="clusters">Cluster Characteristics</h2>
+    <p>The 12 clusters (labeled A&ndash;L) cover all 833 topics. Each cluster's instructional hours roughly correspond to a full-year course (meeting 3&ndash;4 hours/week for 28 weeks).</p>
+    <table>
+        <thead>
+            <tr><th>Cluster</th><th>Topics</th><th>Hours</th><th>Longest Chain</th><th>Neophyte Topics</th><th>Terminal Topics</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>A</td><td>98</td><td>96.25</td><td>11</td><td>8</td><td>49</td></tr>
+            <tr><td>B</td><td>69</td><td>84</td><td>12</td><td>10</td><td>19</td></tr>
+            <tr><td>C</td><td>91</td><td>115</td><td>12</td><td>6</td><td>41</td></tr>
+            <tr><td>D</td><td>65</td><td>85</td><td>5</td><td>9</td><td>24</td></tr>
+            <tr><td>E</td><td>72</td><td>105</td><td>6</td><td>3</td><td>39</td></tr>
+            <tr><td>F</td><td>75</td><td>82.25</td><td>6</td><td>5</td><td>31</td></tr>
+            <tr><td>G</td><td>41</td><td>52.5</td><td>3</td><td>12</td><td>17</td></tr>
+            <tr><td>H</td><td>75</td><td>95</td><td>17</td><td>3</td><td>25</td></tr>
+            <tr><td>I</td><td>76</td><td>93.75</td><td>8</td><td>8</td><td>42</td></tr>
+            <tr><td>J</td><td>74</td><td>107</td><td>9</td><td>8</td><td>31</td></tr>
+            <tr><td>K</td><td>79</td><td>85</td><td>7</td><td>16</td><td>33</td></tr>
+            <tr><td>L</td><td>67</td><td>93.5</td><td>9</td><td>11</td><td>27</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Neophyte topics</strong> have no prerequisites &mdash; they are entry points. <strong>Terminal topics</strong> have no successors &mdash; they represent the most advanced content. Cluster H has the longest internal chain (17 levels).</p>
+
+    <!-- Section 4 -->
+    <h2 class="section-title section-anchor" id="distribution">Traditional Course Topics Across Clusters</h2>
+    <p>This table shows how traditional course subjects distribute across the DEEP clusters. An "X" means topics from that subject appear in that cluster. Notice how subjects scatter across multiple clusters &mdash; this is the key to shorter critical paths.</p>
+    <div style="overflow-x:auto;">
+    <table>
+        <thead>
+            <tr><th>Subject</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Mathematics*</td><td>X</td><td></td><td></td><td>X</td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Physics*</td><td></td><td></td><td></td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Chemistry*</td><td></td><td></td><td></td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Scientific Computing</td><td></td><td>X</td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td><td></td><td>X</td><td>X</td></tr>
+            <tr><td>Statics</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td><td>X</td><td></td><td></td></tr>
+            <tr><td>Electrical Engr.</td><td></td><td>X</td><td></td><td>X</td><td></td><td>X</td><td>X</td><td></td><td></td><td>X</td><td></td><td></td></tr>
+            <tr><td>Prob./Stats.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td></tr>
+            <tr><td>Graphics</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td><td>X</td><td></td><td></td></tr>
+            <tr><td>Material Science</td><td>X</td><td>X</td><td></td><td></td><td>X</td><td>X</td><td>X</td><td></td><td></td><td>X</td><td></td><td></td></tr>
+            <tr><td>Mechanics of Solids</td><td></td><td></td><td></td><td></td><td>X</td><td>X</td><td></td><td></td><td></td><td>X</td><td></td><td>X</td></tr>
+            <tr><td>Dynamics</td><td></td><td></td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Thermodynamics</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Fluid Mechanics</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td><td>X</td><td></td><td></td></tr>
+            <tr><td>Heat Transfer</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Manufacturing</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td><td></td><td>X</td><td></td></tr>
+            <tr><td>Machine Design</td><td></td><td>X</td><td></td><td></td><td></td><td>X</td><td></td><td>X</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>System Dynamics</td><td>X</td><td></td><td>X</td><td></td><td></td><td>X</td><td></td><td></td><td></td><td>X</td><td></td><td>X</td></tr>
+            <tr><td>Design</td><td></td><td>X</td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td><td></td><td>X</td><td>X</td></tr>
+            <tr><td>Economics</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>X</td><td></td></tr>
+        </tbody>
+    </table>
+    </div>
+    <p><em>* Traditional courses not taught within the ME department; multiple courses lumped into one row.</em></p>
+    <p><strong>Key observation:</strong> Material Science appears in 6 clusters, System Dynamics in 5, and Electrical Engineering topics in 5. Traditional single-course organization forces long chains; distributing topics across clusters breaks these chains.</p>
+
+    <!-- Section 5 -->
+    <h2 class="section-title section-anchor" id="umsl-paths">UMSL Critical Paths</h2>
+    <p>The <strong>critical path</strong> is the longest chain of prerequisite-dependent courses. A student who fails any course on the critical path is delayed by at least one semester.</p>
+
+    <h3>Longest Chain: Thermal Track (7 courses)</h3>
+    <div class="chain-visual">
+        <span class="chain-node math">MATH 1800</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 1900</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 2000</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 2020</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3370</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3380</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 4450</span>
+    </div>
+    <p>7 courses spanning semesters 1&ndash;8. This is the minimum path to CFD.</p>
+
+    <h3>Capstone Chain (8 courses)</h3>
+    <div class="chain-visual">
+        <span class="chain-node math">MATH 1800</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node phys">PHYS 2111</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node engr">ENGR 2310</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node engr">ENGR 2332</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3360</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node cap">MENG 4980</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node cap">MENG 4990</span>
+    </div>
+    <p>Also requires MENG 3380 as co-prerequisite for 4980, which has its own 6-course chain.</p>
+
+    <h3>Controls Chain (7 courses)</h3>
+    <div class="chain-visual">
+        <span class="chain-node math">MATH 1800</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 1900</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node engr">ENGR 2310</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node engr">ENGR 2320</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 2020</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3350</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3350L</span>
+    </div>
+
+    <h3>Instrumentation Chain (6 courses)</h3>
+    <div class="chain-visual">
+        <span class="chain-node math">MATH 1800</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 1900</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node phys">PHYS 2112</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node math">MATH 2000</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node engr">EENG 2310</span><span class="chain-arrow">&rarr;</span>
+        <span class="chain-node me">MENG 3330</span>
+    </div>
+
+    <h3>Peer Comparison</h3>
+    <table>
+        <thead><tr><th>School</th><th>Longest Chain</th><th>Courses in Chain</th><th>Total Credits</th></tr></thead>
+        <tbody>
+            <tr><td>UMSL</td><td>7&ndash;8 courses</td><td>Calc I &rarr; ... &rarr; CFD / Capstone</td><td>125</td></tr>
+            <tr><td>Missouri S&amp;T</td><td>8&ndash;9 courses</td><td>Calc I &rarr; ... &rarr; ME Systems Lab (4842)</td><td>128</td></tr>
+            <tr><td>SIUE</td><td>7&ndash;8 courses</td><td>Calc I &rarr; ... &rarr; ME Design II (484)</td><td>129</td></tr>
+            <tr><td>SLU</td><td>7 courses</td><td>Calc I &rarr; ... &rarr; Capstone (4024)</td><td>129</td></tr>
+        </tbody>
+    </table>
+    <p>UMSL's critical path length is comparable to peers. The issue is not the length but the <strong>lack of parallel alternatives</strong> when a student falls off the path.</p>
+
+    <!-- Section 6 -->
+    <h2 class="section-title section-anchor" id="flexibility">Flexibility &amp; Bottleneck Analysis</h2>
+    <p>A <strong>bottleneck course</strong> is one that gates the most downstream courses. Failing a bottleneck has the largest cascading delay.</p>
+
+    <h3>UMSL Bottleneck Courses (ranked by downstream impact)</h3>
+    <table>
+        <thead><tr><th>Course</th><th>Sem.</th><th>Downstream Courses Blocked</th><th>Impact</th></tr></thead>
+        <tbody>
+            <tr><td><strong>MATH 2020</strong> (Diff Eq)</td><td>Y2 Sp</td><td>MENG 3370, 3380, 3350, 4450, 4980, 4990</td><td><span class="badge badge-fail">Critical</span></td></tr>
+            <tr><td><strong>ENGR 2320</strong> (Dynamics)</td><td>Y2 Sp</td><td>MENG 3370, 3350, 3350L, 4450, 4980, 4990</td><td><span class="badge badge-fail">Critical</span></td></tr>
+            <tr><td><strong>ENGR 2332</strong> (Mech. of Materials)</td><td>Y2 Sp</td><td>MENG 3340, 3360, 3390, 4440, 4490, 4980, 4990</td><td><span class="badge badge-fail">Critical</span></td></tr>
+            <tr><td><strong>ENGR 2330</strong> (Thermo)</td><td>Y2 Sp</td><td>ENGR 3300, MENG 3370, 3380, 4450, 4460</td><td><span class="badge badge-warn">High</span></td></tr>
+            <tr><td><strong>ENGR 2310</strong> (Statics)</td><td>Y2 Fa</td><td>ENGR 2320, 2332 + all their downstream</td><td><span class="badge badge-warn">High</span></td></tr>
+            <tr><td><strong>EENG 2310</strong> (Circuits)</td><td>Y2 Fa</td><td>MENG 3330, ENGR 3300</td><td><span class="badge badge-info">Moderate</span></td></tr>
+            <tr><td><strong>MENG 3370</strong> (Fluids)</td><td>Y3 Fa</td><td>MENG 3380, 4450, 4460, 4980</td><td><span class="badge badge-warn">High</span></td></tr>
+        </tbody>
+    </table>
+
+    <h3>The Year 2 Spring Problem</h3>
+    <div class="card card-danger">
+        <p><strong>Year 2 Spring is the critical semester.</strong> It contains 4 gateway courses (Dynamics, Mechanics of Materials, Thermo, Diff Eq) that collectively gate almost ALL of Year 3 and Year 4. A student who fails ANY of these courses cannot take most Year 3 courses and will be delayed by a full year.</p>
+        <p>Compare: Year 2 Spring has 15 credits of tightly coupled prerequisites. Year 3 Spring has 18 credits, the heaviest semester &mdash; all depending on Year 2 Spring success.</p>
+    </div>
+
+    <h3>Semester Credit Load Distribution</h3>
+    <table>
+        <thead><tr><th>Semester</th><th>Credits</th><th>ME Core Credits</th><th>Risk Level</th></tr></thead>
+        <tbody>
+            <tr><td>Y1 Fall</td><td>15</td><td>2</td><td><span class="badge badge-pass">Low</span></td></tr>
+            <tr><td>Y1 Spring</td><td>15</td><td>2</td><td><span class="badge badge-pass">Low</span></td></tr>
+            <tr><td>Y2 Fall</td><td>16</td><td>3</td><td><span class="badge badge-info">Moderate</span></td></tr>
+            <tr><td>Y2 Spring</td><td>15</td><td>12</td><td><span class="badge badge-fail">Critical</span></td></tr>
+            <tr><td>Y3 Fall</td><td>16</td><td>10</td><td><span class="badge badge-warn">High</span></td></tr>
+            <tr><td>Y3 Spring</td><td>18</td><td>15</td><td><span class="badge badge-fail">Critical</span></td></tr>
+            <tr><td>Y4 Fall</td><td>15</td><td>6</td><td><span class="badge badge-info">Moderate</span></td></tr>
+            <tr><td>Y4 Spring</td><td>15</td><td>9</td><td><span class="badge badge-info">Moderate</span></td></tr>
+        </tbody>
+    </table>
+
+    <!-- Section 7 -->
+    <h2 class="section-title section-anchor" id="recommendations">Recommendations Based on DEEP</h2>
+
+    <div class="card card-highlight">
+        <h3>1. Reduce Year 3 Spring Overload</h3>
+        <p>Move MENG 3390 (Product Dev Lab, 1 cr) and/or MENG 3340 (Materials, 3 cr) to Year 3 Fall to balance the load. Materials only requires ENGR 2332, which is available after Y2 Spring.</p>
+    </div>
+
+    <div class="card card-highlight">
+        <h3>2. Create Parallel Tracks</h3>
+        <p>Allow thermal-track and mechanical-track students to take upper-level courses in different orders. Currently, all students must take the same fixed sequence. Elective slots would enable this naturally.</p>
+    </div>
+
+    <div class="card card-highlight">
+        <h3>3. Add Elective Flexibility</h3>
+        <p>Converting fixed Year 4 courses (4440, 4450, 4460) into elective choices reduces path rigidity. Students who struggle with one area can choose alternatives without delay.</p>
+    </div>
+
+    <div class="card card-highlight">
+        <h3>4. Consider Topic-Level Reorganization</h3>
+        <p>Some UMSL courses already blend subdisciplines &mdash; MENG 3360 combines Machine Design AND Manufacturing. This is DEEP-aligned. Consider more blended courses that teach related topics together, just-in-time.</p>
+    </div>
+
+    <div class="card card-highlight">
+        <h3>5. Strengthen Year 2 Spring Support</h3>
+        <p>Since Y2 Spring is the critical gateway, consider: supplemental instruction, tutoring programs, early-warning systems for students struggling in Statics (Y2 Fall), and summer course offerings for Dynamics/Thermo to allow recovery.</p>
+    </div>
+
+    <div class="card card-highlight">
+        <h3>6. Offer Summer Critical Courses</h3>
+        <p>Offering ENGR 2320 (Dynamics), ENGR 2330 (Thermo), or MATH 2020 (Diff Eq) in summer would give students who failed in Spring a path to re-enter the sequence in Fall without a full-year delay. This is the single most impactful retention intervention.</p>
+    </div>
+
+    <!-- Section 8 -->
+    <h2 class="section-title section-anchor" id="comparison">Traditional vs. DEEP-Inspired</h2>
+
+    <div class="comparison-grid">
+        <div class="card">
+            <h3>Traditional Structure</h3>
+            <p style="color:#656d76; font-size:13px;">Linear chains, one subject per course, rigid sequencing</p>
+            <div class="chain-visual">
+                <span class="chain-node engr">Statics</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node engr">Dynamics</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me">Mechanisms</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me">Machine Design</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node cap">Capstone</span>
+            </div>
+            <div class="chain-visual">
+                <span class="chain-node engr">Thermo</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me">Fluids</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me">Heat Transfer</span><span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me">CFD</span>
+            </div>
+            <ul>
+                <li>Each course = one subdiscipline</li>
+                <li>Long sequential chains</li>
+                <li>Fail one course = semester+ delay</li>
+                <li>Little schedule flexibility</li>
+                <li>Students enter in Year 1 or not at all</li>
+            </ul>
+        </div>
+        <div class="card card-success">
+            <h3>DEEP-Inspired Structure</h3>
+            <p style="color:#656d76; font-size:13px;">Topic clusters, mixed subdisciplines, parallel paths</p>
+            <div class="chain-visual">
+                <span class="chain-node me" style="background:#e8f5e9; border-color:#4caf50;">Cluster B<br><small>Thermo + Kinematics + Materials</small></span>
+                <span class="chain-arrow">&rarr;</span>
+                <span class="chain-node me" style="background:#e8f5e9; border-color:#4caf50;">Cluster F<br><small>Stresses + Circuits + Design</small></span>
+            </div>
+            <div class="chain-visual">
+                <span class="chain-node me" style="background:#e8f5e9; border-color:#4caf50;">Cluster K<br><small>Computing + Manufacturing</small></span>
+                <span style="color:#656d76; font-size:13px; padding:4px;">(independent)</span>
+            </div>
+            <ul>
+                <li>Topics from multiple subjects per cluster</li>
+                <li>Shorter prerequisite chains</li>
+                <li>Multiple parallel paths</li>
+                <li>More entry points (can start Year 2)</li>
+                <li>Better recovery from failures</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card card-warning">
+        <h3>Practical Consideration</h3>
+        <p>DEEP represents an <em>ideal</em> restructuring. Full implementation would require rewriting textbooks and retraining faculty. However, UMSL can apply DEEP <em>principles</em> within its existing structure:</p>
+        <ul>
+            <li>Blend subdisciplines where natural (already done with MENG 3360)</li>
+            <li>Add elective flexibility to break rigid chains</li>
+            <li>Offer summer courses at bottleneck points</li>
+            <li>Move courses earlier when prerequisite chains allow</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

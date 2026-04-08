@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposed Curriculum - UMSL Mechanical Engineering</title>
+    <link rel="stylesheet" href="nav.css">
+    <style>
+        /* Color-coded highlights for the semester plan */
+        .hl-new {
+            background: #dafbe1;
+            border: 1px solid #a7f3d0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-weight: 600;
+        }
+        .hl-updated {
+            background: #fff8c5;
+            border: 1px solid #fde68a;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        .hl-moved {
+            background: #ddf4ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 12px 0 20px;
+            font-size: 13px;
+        }
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+        .swatch-new { background: #dafbe1; border: 1px solid #a7f3d0; }
+        .swatch-updated { background: #fff8c5; border: 1px solid #fde68a; }
+        .swatch-moved { background: #ddf4ff; border: 1px solid #bfdbfe; }
+        .swatch-unchanged { background: #f6f8fa; border: 1px solid #d1d9e0; }
+
+        /* Semester grid */
+        .semester-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        @media (max-width: 768px) {
+            .semester-grid { grid-template-columns: 1fr; }
+        }
+        .semester-card {
+            border: 1px solid #d1d9e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .semester-header {
+            background: #24292f;
+            color: #ffffff;
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .semester-body {
+            padding: 12px 16px;
+        }
+        .semester-body ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .semester-body li {
+            padding: 4px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #eef1f5;
+            margin-bottom: 0;
+        }
+        .semester-body li:last-child {
+            border-bottom: none;
+        }
+
+        /* Elective menu card */
+        .elective-menu {
+            background: #f6f8fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .elective-menu h3 {
+            margin-top: 0;
+        }
+        .elective-menu ul {
+            margin-bottom: 0;
+        }
+
+        /* Gap resolution cards */
+        .gap-card {
+            border: 1px solid #d1d9e0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0;
+        }
+        .gap-before {
+            color: #82071e;
+            font-size: 13px;
+        }
+        .gap-after {
+            color: #116329;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .gap-arrow {
+            display: inline-block;
+            margin: 0 8px;
+            color: #656d76;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin: 24px 0 24px 20px;
+            padding-left: 24px;
+            border-left: 3px solid #d1d9e0;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #0969da;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px #d1d9e0;
+        }
+        .timeline-item.done .timeline-dot {
+            background: #1a7f37;
+        }
+        .timeline-phase {
+            font-weight: 700;
+            font-size: 15px;
+            color: #24292f;
+        }
+        .timeline-date {
+            font-size: 13px;
+            color: #656d76;
+            margin-bottom: 4px;
+        }
+        .timeline-details {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Overload highlight */
+        .overload {
+            background: #ffebe9;
+            font-weight: 600;
+        }
+
+        /* Summary stat cards */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-card {
+            background: #f6f8fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0969da;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #656d76;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar (standalone, matching nav.css .top-nav style) -->
+<nav class="top-nav">
+    <span class="nav-brand">UMSL ME Analysis</span>
+    <a href="index.html">Prerequisite Graph</a>
+    <a href="abet.html">ABET Audit</a>
+    <a href="ai-policy.html">AI Policy</a>
+    <a href="deep-analysis.html">DEEP Analysis</a>
+    <a href="syllabi.html">Syllabi</a>
+    <a href="proposed-curriculum.html" class="active">Proposed Curriculum</a>
+</nav>
+
+<div class="page-container">
+    <h1 class="page-title">Proposed Revised 4-Year BSME Curriculum</h1>
+
+    <!-- Table of Contents -->
+    <div class="page-toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#summary">Executive Summary</a></li>
+            <li><a href="#changes">Changes from Current Program</a></li>
+            <li><a href="#plan">Proposed 4-Year Plan</a></li>
+            <li><a href="#comparison">Credit Hour Comparison</a></li>
+            <li><a href="#gaps-fixed">ABET Gap Resolution</a></li>
+            <li><a href="#load">Semester Load Analysis</a></li>
+            <li><a href="#timeline">Implementation Timeline</a></li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 1: Executive Summary -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="summary">Executive Summary</h2>
+
+    <p>
+        This document presents a proposed revision of the UMSL Mechanical Engineering BSME curriculum,
+        designed to close three critical ABET gaps while modernizing course content for the AI era. The
+        revisions maintain the program's competitive credit total and balanced semester loads.
+    </p>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-number">128</div>
+            <div class="stat-label">Proposed Total Credits (+3 from 125)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3 &rarr; 0</div>
+            <div class="stat-label">ABET Gaps Remaining</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">+2</div>
+            <div class="stat-label">New Required Courses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Courses with Content Updates</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Fixed Courses Converted to Electives</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">6 cr</div>
+            <div class="stat-label">New Elective Flexibility</div>
+        </div>
+    </div>
+
+    <div class="card card-highlight">
+        <strong>Key principle:</strong> Minimal disruption, maximum ABET compliance. The changes add only 3 credits
+        to the total, bringing UMSL in line with peer programs (S&amp;T 128, SIUE 129, SLU 129). Two fixed
+        upper-division courses are converted to an elective menu, giving students depth choices that ABET
+        evaluators expect.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 2: Changes from Current Program -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="changes">Changes from Current Program</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Change</th>
+                <th>Type</th>
+                <th>Credits Impact</th>
+                <th>Priority</th>
+                <th>Justification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Add MENG 33XX Kinematics &amp; Dynamics of Mechanisms</td>
+                <td><span class="badge badge-pass">Add</span></td>
+                <td>+3</td>
+                <td><span class="badge badge-fail">Critical</span></td>
+                <td>ABET ME criteria requires mechanical systems breadth</td>
+            </tr>
+            <tr>
+                <td>Add vibrations content to MENG 3350; rename to "System Dynamics, Vibrations &amp; Control"</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-fail">Critical</span></td>
+                <td>ABET ME criteria requires vibrations coverage</td>
+            </tr>
+            <tr>
+                <td>Convert MENG 4440 (Composites) to elective</td>
+                <td><span class="badge badge-info">Convert</span></td>
+                <td>0</td>
+                <td><span class="badge badge-warn">Important</span></td>
+                <td>Creates student choice, reduces path rigidity</td>
+            </tr>
+            <tr>
+                <td>Convert MENG 4460 (Renewable Energy) to elective</td>
+                <td><span class="badge badge-info">Convert</span></td>
+                <td>0</td>
+                <td><span class="badge badge-warn">Important</span></td>
+                <td>Creates student choice</td>
+            </tr>
+            <tr>
+                <td>Add 2 ME Elective slots (6 cr)</td>
+                <td><span class="badge badge-pass">Add</span></td>
+                <td>0 (net)</td>
+                <td><span class="badge badge-warn">Important</span></td>
+                <td>Replaces fixed courses with elective menu</td>
+            </tr>
+            <tr>
+                <td>Update PHIL 2259 content (AI ethics modules)</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-warn">Important</span></td>
+                <td>Add AI ethics, algorithmic bias, autonomous systems</td>
+            </tr>
+            <tr>
+                <td>Update CMP SCI 1250 content (Python + data science + AI tools)</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-warn">Important</span></td>
+                <td>Modernize to Python-first with data science fundamentals</td>
+            </tr>
+            <tr>
+                <td>Update MENG 3360 content (add generative design)</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-info">Nice-to-have</span></td>
+                <td>AI-driven topology optimization, generative CAD</td>
+            </tr>
+            <tr>
+                <td>Update MENG 4490 content (add Industry 4.0)</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-info">Nice-to-have</span></td>
+                <td>Smart manufacturing, IoT, predictive maintenance</td>
+            </tr>
+            <tr>
+                <td>Update MENG 4450 content (add PINNs)</td>
+                <td><span class="badge badge-warn">Update</span></td>
+                <td>0</td>
+                <td><span class="badge badge-info">Nice-to-have</span></td>
+                <td>Physics-informed neural networks, ML surrogate models</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- Section 3: Proposed 4-Year Plan -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="plan">Proposed 4-Year Plan</h2>
+
+    <div class="legend">
+        <span><span class="legend-swatch swatch-new"></span> NEW course</span>
+        <span><span class="legend-swatch swatch-updated"></span> UPDATED content</span>
+        <span><span class="legend-swatch swatch-moved"></span> MOVED semester</span>
+        <span><span class="legend-swatch swatch-unchanged"></span> Unchanged</span>
+    </div>
+
+    <!-- Year 1 -->
+    <h3>Year 1</h3>
+    <div class="semester-grid">
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Fall - Year 1</span>
+                <span>15 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>ENGL 1100 - First-Year Writing (3)</li>
+                    <li>ENGR 1414 - Elementary Engineering Design (2)</li>
+                    <li>MATH 1800 - Calculus I (5)</li>
+                    <li>CHEM XXXX - General Chemistry (4)</li>
+                    <li>INTDSC 1003 - First Year Experience (1)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Spring - Year 1</span>
+                <span>15 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>MATH 1900 - Calculus II (5)</li>
+                    <li>MENG 1204 - ME 3D Design (2)</li>
+                    <li>PHYS 2111/L - Mechanics &amp; Heat (5)</li>
+                    <li>Core - American History/Gov (3)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year 2 -->
+    <h3>Year 2</h3>
+    <div class="semester-grid">
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Fall - Year 2</span>
+                <span>16 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>EENG 2310 - Circuit Analysis I (3)</li>
+                    <li>ENGR 2310 - Statics (3)</li>
+                    <li>MATH 2000 - Calculus III (5)</li>
+                    <li>PHYS 2112/L - E&amp;M, Optics (5)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Spring - Year 2</span>
+                <span>15 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>ENGR 2320 - Dynamics (3)</li>
+                    <li>ENGR 2332 - Mechanics of Materials (3)</li>
+                    <li>ENGR 2330 - Intro to Thermodynamics (3)</li>
+                    <li><span class="hl-updated">CMP SCI 1250* - Computing &amp; Data Science (3)</span></li>
+                    <li>MATH 2020 - Differential Equations (3)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year 3 -->
+    <h3>Year 3</h3>
+    <div class="semester-grid">
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Fall - Year 3</span>
+                <span>16 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>MENG 3370/L - Fluid Mechanics + Lab (4)</li>
+                    <li>MENG 3330 - Instrumentation &amp; Measurement (3)</li>
+                    <li>ENGR 3300 - Applied Thermodynamics (3)</li>
+                    <li><span class="hl-new">MENG 33XX - Kinematics &amp; Dynamics of Mechanisms (3) [NEW]</span></li>
+                    <li><span class="hl-updated">PHIL 2259* - Engineering Ethics (3)</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Spring - Year 3</span>
+                <span>16 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>MENG 3340 - Properties of Material &amp; Testing (3)</li>
+                    <li><span class="hl-updated">MENG 3350*/L - System Dynamics, Vibrations &amp; Control (4) [UPDATED]</span></li>
+                    <li><span class="hl-updated">MENG 3360* - Machine Design &amp; Manufacturing (3)</span></li>
+                    <li>MENG 3380/L - Heat Transfer + Lab (4)</li>
+                    <li><span class="hl-moved">ENGL 3130 - Technical Writing (3) [MOVED from Y3 Fall]</span></li>
+                </ul>
+                <p style="font-size:12px; color:#656d76; margin-top:8px; margin-bottom:0;">
+                    Note: MENG 3390 and Explore SS moved to Year 4 to balance load. Tech Writing moved here from Y3 Fall.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year 4 -->
+    <h3>Year 4</h3>
+    <div class="semester-grid">
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Fall - Year 4</span>
+                <span>15 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>MENG 4980 - Senior Design I (2)</li>
+                    <li><span class="hl-updated">MENG 4490* - Advanced Manufacturing (3)</span></li>
+                    <li>ENGR 4400 - FE Exam Review (1)</li>
+                    <li>ENGR 2022 - Engineering Economics (3)</li>
+                    <li><span class="hl-new">ME Elective (3) [replaces fixed course]</span></li>
+                    <li>Core - Communication Proficiency (3)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="semester-card">
+            <div class="semester-header">
+                <span>Spring - Year 4</span>
+                <span>15 credits</span>
+            </div>
+            <div class="semester-body">
+                <ul>
+                    <li>MENG 4990 - Senior Design II (2)</li>
+                    <li><span class="hl-new">ME Elective (3) [replaces fixed course]</span></li>
+                    <li>MENG 3390 - Product Dev &amp; Prototyping Lab (1)</li>
+                    <li>Explore - Social Sciences (3)</li>
+                    <li>Explore - Humanities &amp; Fine Arts (3)</li>
+                    <li>Explore - Social Sciences (3)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elective Menu -->
+    <div class="elective-menu">
+        <h3>ME Elective Menu (choose 2 courses, 6 credits)</h3>
+        <ul>
+            <li><strong>MENG 4440</strong> - Intro to Composite Materials (3)</li>
+            <li><strong>MENG 4450</strong> - Computational Fluid Dynamics (3) <span class="hl-updated" style="font-size:12px;">updated w/ PINNs</span></li>
+            <li><strong>MENG 4460</strong> - Renewable Energy Systems + Lab (3, expanded from 1 cr)</li>
+            <li><strong>MENG 4XXX</strong> - AI/ML for Mechanical Engineers (3) <span class="badge badge-info">Future</span></li>
+            <li><strong>MENG 3XXX</strong> - Mechatronics &amp; Smart Systems (3) <span class="badge badge-info">Future</span></li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 4: Credit Hour Comparison -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="comparison">Credit Hour Comparison</h2>
+
+    <p>
+        Side-by-side comparison of credit distributions across Missouri ME programs. The proposed UMSL
+        revision brings the total in line with peer institutions while maintaining a competitive balance.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>UMSL Current</th>
+                <th style="background:#dafbe1;">UMSL Proposed</th>
+                <th>Missouri S&amp;T</th>
+                <th>SIUE</th>
+                <th>SLU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Math &amp; Basic Science</td>
+                <td>35</td>
+                <td style="background:#f0fdf4;"><strong>35</strong></td>
+                <td>33</td>
+                <td>35</td>
+                <td>34</td>
+            </tr>
+            <tr>
+                <td>Engineering Topics</td>
+                <td>65</td>
+                <td style="background:#f0fdf4;"><strong>68</strong></td>
+                <td>67</td>
+                <td>65</td>
+                <td>63</td>
+            </tr>
+            <tr>
+                <td>General Education</td>
+                <td>25</td>
+                <td style="background:#f0fdf4;"><strong>25</strong></td>
+                <td>28</td>
+                <td>29</td>
+                <td>32</td>
+            </tr>
+            <tr style="font-weight:700; background:#f6f8fa;">
+                <td>Total</td>
+                <td>125</td>
+                <td style="background:#dafbe1;">128</td>
+                <td>128</td>
+                <td>129</td>
+                <td>129</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card card-success">
+        <strong>Result:</strong> The proposed 128-credit total matches Missouri S&amp;T exactly and sits just
+        one credit below SIUE and SLU. Engineering topic hours increase from 65 to 68, strengthening the
+        ABET Criterion 5 compliance while keeping the overall program competitive in total hours.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 5: ABET Gap Resolution -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="gaps-fixed">ABET Gap Resolution</h2>
+
+    <p>
+        The current UMSL ME program has three critical ABET gaps and one recommended policy addition.
+        Below is the before/after status for each.
+    </p>
+
+    <!-- Gap 1 -->
+    <div class="gap-card" style="border-left: 4px solid #1a7f37;">
+        <h3 style="margin-top:0;">Gap 1: Kinematics/Dynamics of Mechanisms</h3>
+        <p>
+            <span class="gap-before"><span class="badge badge-fail">BEFORE</span> No course covering linkage analysis, cam design, gear trains, or mechanism synthesis. S&amp;T and SIUE both have dedicated courses.</span>
+        </p>
+        <p>
+            <span class="gap-after"><span class="badge badge-pass">AFTER</span> FIXED - Add MENG 33XX Kinematics &amp; Dynamics of Mechanisms (3 cr) in Year 3 Fall. Covers linkage analysis, cam design, gear trains, balancing, and mechanism synthesis.</span>
+        </p>
+    </div>
+
+    <!-- Gap 2 -->
+    <div class="gap-card" style="border-left: 4px solid #1a7f37;">
+        <h3 style="margin-top:0;">Gap 2: Vibrations</h3>
+        <p>
+            <span class="gap-before"><span class="badge badge-fail">BEFORE</span> No vibrations coverage anywhere in the curriculum. ABET ME program criteria requires mechanical systems breadth including vibrations.</span>
+        </p>
+        <p>
+            <span class="gap-after"><span class="badge badge-pass">AFTER</span> FIXED - Expand MENG 3350 to include vibrations content (2-3 weeks). Rename to "System Dynamics, Vibrations &amp; Control." Follows SIUE model of integrating vibrations into the dynamics/control course.</span>
+        </p>
+    </div>
+
+    <!-- Gap 3 -->
+    <div class="gap-card" style="border-left: 4px solid #1a7f37;">
+        <h3 style="margin-top:0;">Gap 3: No Technical Electives</h3>
+        <p>
+            <span class="gap-before"><span class="badge badge-fail">BEFORE</span> All four upper-division ME courses (4440, 4450, 4460, 4490) are fixed and required. Zero elective choice. Peers offer 6-12 credits of electives from menus of 10-20+ courses.</span>
+        </p>
+        <p>
+            <span class="gap-after"><span class="badge badge-pass">AFTER</span> FIXED - Convert MENG 4440 and MENG 4460 to elective options. Create 6-credit ME Elective menu with 5 choices (expanding over time). Students select 2 courses from the menu.</span>
+        </p>
+    </div>
+
+    <!-- Gap 4 -->
+    <div class="gap-card" style="border-left: 4px solid #d4a017;">
+        <h3 style="margin-top:0;">Gap 4: Prerequisite Grade Requirements</h3>
+        <p>
+            <span class="gap-before"><span class="badge badge-warn">BEFORE</span> No explicit grade requirements for course progression. S&amp;T requires C or better in 14 gateway courses.</span>
+        </p>
+        <p>
+            <span class="gap-after"><span class="badge badge-warn">RECOMMENDED</span> Add C-or-better policy for 12 gateway courses: MATH 1800/1900/2000/2020, PHYS 2111/2112, ENGR 2310/2320/2330/2332, EENG 2310, CMP SCI 1250. Demonstrates program rigor to ABET evaluators.</span>
+        </p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 6: Semester Load Analysis -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="load">Semester Load Analysis</h2>
+
+    <p>
+        Comparing credit loads per semester between the current and proposed plans. Semesters exceeding
+        17 credits are flagged as potential concerns for student retention and success.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Current (cr)</th>
+                <th>Proposed (cr)</th>
+                <th>Change</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Year 1 Fall</td>
+                <td>15</td>
+                <td>15</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 1 Spring</td>
+                <td>15</td>
+                <td>15</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 2 Fall</td>
+                <td>16</td>
+                <td>16</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 2 Spring</td>
+                <td>15</td>
+                <td>15</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 3 Fall</td>
+                <td>16</td>
+                <td>16</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 3 Spring</td>
+                <td class="overload">18</td>
+                <td>16</td>
+                <td>-2</td>
+                <td><span class="badge badge-pass">IMPROVED</span></td>
+            </tr>
+            <tr>
+                <td>Year 4 Fall</td>
+                <td>15</td>
+                <td>15</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr>
+                <td>Year 4 Spring</td>
+                <td>15</td>
+                <td>15</td>
+                <td>0</td>
+                <td><span class="badge badge-pass">OK</span></td>
+            </tr>
+            <tr style="font-weight:700; background:#f6f8fa;">
+                <td>Total</td>
+                <td>125</td>
+                <td>128</td>
+                <td>+3</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card card-success">
+        <strong>Load improvement:</strong> The current plan has an 18-credit overload in Year 3 Spring.
+        The proposed revision reduces this to 16 credits by moving Technical Writing (ENGL 3130) to
+        Year 3 Spring from Year 3 Fall (which absorbs the new Mechanisms course), and redistributing
+        MENG 3390 and one Gen Ed to Year 4. No semester in the proposed plan exceeds 16 credits.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Section 7: Implementation Timeline -->
+    <!-- ============================================================ -->
+    <h2 class="section-title section-anchor" id="timeline">Implementation Timeline</h2>
+
+    <p>
+        A phased rollout minimizes disruption to currently enrolled students while progressively
+        building toward full ABET compliance before the first graduating class.
+    </p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Phase 1 - Fall 2026</div>
+            <div class="timeline-phase">Content Updates (Low Effort)</div>
+            <div class="timeline-details">
+                <ul>
+                    <li>Update <strong>PHIL 2259</strong> with AI ethics modules (3-4 weeks of new content)</li>
+                    <li>Update <strong>CMP SCI 1250</strong> to Python-first with data science fundamentals</li>
+                    <li>Update <strong>ENGR 1414</strong> with AI literacy module</li>
+                    <li>Establish C-or-better prerequisite policy for gateway courses</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Phase 2 - Fall 2027</div>
+            <div class="timeline-phase">New Course + Curriculum Restructure (Critical ABET Fixes)</div>
+            <div class="timeline-details">
+                <ul>
+                    <li>Launch <strong>MENG 33XX Kinematics &amp; Dynamics of Mechanisms</strong> (3 cr, new course)</li>
+                    <li>Expand <strong>MENG 3350</strong> with vibrations content; rename to "System Dynamics, Vibrations &amp; Control"</li>
+                    <li>Implement revised semester sequencing (move Tech Writing, redistribute loads)</li>
+                    <li>Update <strong>MENG 3360</strong> with generative design content</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Phase 3 - Fall 2028</div>
+            <div class="timeline-phase">Elective Menu Launch</div>
+            <div class="timeline-details">
+                <ul>
+                    <li>Convert MENG 4440 and MENG 4460 from required to elective menu options</li>
+                    <li>Expand MENG 4460 from 1 cr lab to 3 cr course (Renewable Energy Systems + Lab)</li>
+                    <li>Launch first cohort of ME Elective choices</li>
+                    <li>Update <strong>MENG 4490</strong> with Industry 4.0 content</li>
+                    <li>Update <strong>MENG 4450</strong> with PINNs and ML surrogate models</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Phase 4 - Fall 2029</div>
+            <div class="timeline-phase">Expansion + ABET Preparation</div>
+            <div class="timeline-details">
+                <ul>
+                    <li>Add <strong>MENG 4XXX AI/ML for Mechanical Engineers</strong> elective (3 cr)</li>
+                    <li>Add <strong>MENG 3XXX Mechatronics &amp; Smart Systems</strong> elective (3 cr)</li>
+                    <li>First graduating class completes the program</li>
+                    <li>Begin ABET self-study preparation with 2+ years of assessment data</li>
+                    <li>Compile continuous improvement evidence for ABET evaluation visit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-highlight">
+        <strong>Timeline alignment:</strong> The first UMSL ME graduating class is expected around 2029.
+        ABET requires at least one graduating class before a program can apply for initial accreditation.
+        This phased plan ensures all critical gaps are fixed well before the ABET self-study begins,
+        giving the program 2+ years of assessment data to demonstrate continuous improvement.
+    </div>
+
+</div><!-- /page-container -->
+
+<!-- Back to Top -->
+<a href="#" class="back-to-top" id="backToTop" title="Back to top">&uarr;</a>
+
+<script>
+    // Back-to-top visibility
+    const btn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ME Program Course Graph - UMSL Benchmarking</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="nav.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            overflow: hidden;
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 48px);
+        }
+        #toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #f6f8fa;
+            border-bottom: 1px solid #d1d9e0;
+            flex-wrap: wrap;
+            min-height: 44px;
+        }
+        #toolbar h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #656d76;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        #sidebar { display: none; }
+        #sidebar h1 { display: none; }
+        .sidebar-section { display: none; }
+        .sidebar-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #8b949e;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .school-tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .school-tab {
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #d1d9e0;
+            background: #ffffff;
+            color: #656d76;
+            transition: all 0.2s;
+        }
+        .school-tab:hover { border-color: #0969da; color: #1f2328; }
+        .school-tab.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        #course-detail {
+            padding: 20px 24px;
+            background: #ffffff;
+            border-top: 2px solid #d1d9e0;
+            overflow-y: auto;
+            max-height: 45vh;
+            min-height: 0;
+            transition: min-height 0.3s;
+        }
+        #course-detail.has-content {
+            min-height: 180px;
+        }
+        #course-detail h2 {
+            font-size: 20px;
+            color: #0969da;
+            margin-bottom: 4px;
+        }
+        #course-detail .course-title {
+            font-size: 15px;
+            color: #1f2328;
+            margin-bottom: 12px;
+        }
+        .detail-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8b949e;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            font-size: 13px;
+            color: #e1e4e8;
+        }
+        .equiv-chip {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 2px;
+            font-weight: 600;
+        }
+        .equiv-sandt { background: #1f6feb30; color: #58a6ff; border: 1px solid #1f6feb50; }
+        .equiv-siue { background: #2ea04330; color: #3fb950; border: 1px solid #2ea04350; }
+        .equiv-slu { background: #a371f730; color: #bc8cff; border: 1px solid #a371f750; }
+        .gap-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #da363430; color: #f85149; border: 1px solid #da363450;
+            margin: 2px;
+        }
+        #graph-container {
+            flex: 1;
+            position: relative;
+            min-height: 300px;
+        }
+        svg { width: 100%; height: 100%; }
+        .node rect {
+            rx: 6;
+            ry: 6;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: filter 0.2s;
+        }
+        .node:hover rect { filter: brightness(1.3); }
+        .node.highlighted rect { filter: brightness(1.5); stroke-width: 3; }
+        .node.dimmed { opacity: 0.15; }
+        .node text {
+            font-size: 10px;
+            fill: #e1e4e8;
+            pointer-events: none;
+            font-weight: 600;
+        }
+        .node .course-name {
+            font-size: 8px;
+            fill: #8b949e;
+            font-weight: 400;
+        }
+        .link {
+            fill: none;
+            stroke-width: 1;
+            opacity: 0.4;
+        }
+        .link.highlighted { opacity: 0.9; stroke-width: 2; }
+        .link.dimmed { opacity: 0.05; }
+        .link.corequisite {
+            stroke-dasharray: 6,4;
+        }
+        marker { fill: #c9d1d9; }
+        .year-label {
+            font-size: 14px;
+            fill: #8b949e;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .semester-label {
+            font-size: 11px;
+            fill: #6e7681;
+            font-weight: 600;
+        }
+        .controls {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        .ctrl-btn {
+            padding: 6px 12px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .ctrl-btn:hover { border-color: #58a6ff; }
+
+        /* Light theme */
+        body.light { background: #ffffff; color: #1f2328; }
+        body.light #sidebar { background: #f6f8fa; border-right-color: #d1d9e0; }
+        body.light #sidebar h1 { background: #eef1f5; border-bottom-color: #d1d9e0; }
+        body.light .sidebar-section { border-bottom-color: #d1d9e0; }
+        body.light .sidebar-section h3 { color: #656d76; }
+        body.light .school-tab { background: #eef1f5; border-color: #d1d9e0; color: #656d76; }
+        body.light .school-tab.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
+        body.light .filter-chip { background: #eef1f5; border-color: #d1d9e0; color: #656d76; }
+        body.light .filter-chip.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
+        body.light #search-input { background: #ffffff; border-color: #d1d9e0; color: #1f2328; }
+        body.light .ctrl-btn { background: #eef1f5; border-color: #d1d9e0; color: #1f2328; }
+        body.light .legend-item { color: #1f2328; }
+        body.light #course-detail h2 { color: #0969da; }
+        body.light .detail-value { color: #1f2328; }
+        body.light .detail-label { color: #656d76; }
+        body.light #graph-container { background: #ffffff; }
+        body.light .node text { fill: #1f2328; }
+        body.light .node .course-name { fill: #656d76; }
+        body.light .year-label { fill: #656d76; }
+        body.light .semester-label { fill: #8c959f; }
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .filter-chip {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            cursor: pointer;
+            border: 1px solid #d1d9e0;
+            background: #ffffff;
+            color: #656d76;
+            transition: all 0.2s;
+        }
+        .filter-chip:hover { border-color: #0969da; }
+        .filter-chip.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #8b949e;
+        }
+        .stats-bar span { color: #58a6ff; font-weight: 600; }
+        #search-input {
+            padding: 5px 10px;
+            background: #ffffff;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            color: #1f2328;
+            font-size: 12px;
+            outline: none;
+        }
+        #search-input:focus { border-color: #0969da; }
+        #search-input::placeholder { color: #8c959f; }
+        .no-select { user-select: none; }
+    </style>
+</head>
+<body class="light">
+<script>createNav('graph');</script>
+<div id="app">
+    <!-- Top toolbar -->
+    <div id="toolbar">
+        <h3>School:</h3>
+        <div class="school-tabs" id="school-tabs">
+            <div class="school-tab active" data-school="umsl">UMSL</div>
+            <div class="school-tab" data-school="mst">Missouri S&T</div>
+            <div class="school-tab" data-school="siue">SIUE</div>
+            <div class="school-tab" data-school="slu">SLU</div>
+        </div>
+        <span style="color:#d1d9e0;">|</span>
+        <h3>Filter:</h3>
+        <div class="filter-chip" id="btn-toggle-filters" style="font-weight:700; cursor:pointer;">All</div>
+        <div class="filter-chips" id="filter-chips"></div>
+        <span style="color:#d1d9e0;">|</span>
+        <input type="text" id="search-input" placeholder="Search..." style="width:120px;">
+        <div class="stats-bar" id="stats-bar"></div>
+    </div>
+    <!-- Graph area -->
+    <div id="graph-container">
+        <svg id="graph"></svg>
+        <div class="controls">
+            <button class="ctrl-btn" id="btn-theme">Dark Mode</button>
+            <button class="ctrl-btn" id="btn-zoom-in">+</button>
+            <button class="ctrl-btn" id="btn-zoom-out">-</button>
+            <button class="ctrl-btn" id="btn-fit">Fit</button>
+            <button class="ctrl-btn" id="btn-reset">Reset</button>
+        </div>
+    </div>
+    <!-- Course detail panel (below graph) -->
+    <div id="course-detail">
+        <p style="color:#656d76; font-size:14px; text-align:center;">Click any course box above to see its full name, syllabus, prerequisites, co-requisites, and ABET mapping.</p>
+    </div>
+</div>
+<!-- Hidden elements for JS compatibility -->
+<div id="sidebar" style="display:none;"><div id="legend"></div></div>
+
+<script>
+// ============================================================
+// DATA: All four school curricula
+// ============================================================
+
+const CATEGORIES = {
+    math: { label: "Mathematics", color: "#f0883e" },
+    physics: { label: "Physics", color: "#d2a8ff" },
+    chemistry: { label: "Chemistry", color: "#7ee787" },
+    engr_core: { label: "Engineering Core", color: "#58a6ff" },
+    me_core: { label: "ME Core", color: "#ff7b72" },
+    me_advanced: { label: "ME Advanced/Elective", color: "#f778ba" },
+    electrical: { label: "Electrical/CS", color: "#79c0ff" },
+    gen_ed: { label: "General Education", color: "#8b949e" },
+    capstone: { label: "Capstone/Design", color: "#ffd700" },
+    gap: { label: "Gap (Missing at UMSL)", color: "#da3634" }
+};
+
+const schools = {
+    umsl: {
+        name: "UMSL",
+        fullName: "University of Missouri - St. Louis",
+        totalCredits: 125,
+        courses: [
+            // Year 1 Fall
+            { id: "ENGL1100", label: "ENGL 1100", name: "First-Year Writing", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            { id: "ENGR1414", label: "ENGR 1414", name: "Elementary Engineering Design", credits: 2, cat: "engr_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "MATH1800", label: "MATH 1800", name: "Calculus I", credits: 5, cat: "math", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CHEM_ENG", label: "CHEM", name: "General Chemistry for Engineering", credits: 4, cat: "chemistry", sem: 1, prereqs: [], coreqs: [] },
+            { id: "INTDSC1003", label: "INTDSC 1003", name: "First Year Experience", credits: 1, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            // Year 1 Spring
+            { id: "MATH1900", label: "MATH 1900", name: "Calculus II", credits: 5, cat: "math", sem: 2, prereqs: ["MATH1800"], coreqs: [] },
+            { id: "MENG1204", label: "MENG 1204", name: "ME 3D Design (CAD)", credits: 2, cat: "me_core", sem: 2, prereqs: [], coreqs: [] },
+            { id: "PHYS2111", label: "PHYS 2111/L", name: "Physics I: Mechanics & Heat", credits: 5, cat: "physics", sem: 2, prereqs: ["MATH1800"], coreqs: [] },
+            { id: "GE_HIST", label: "Core Hist/Gov", name: "American History & Government", credits: 3, cat: "gen_ed", sem: 2, prereqs: [], coreqs: [] },
+            // Year 2 Fall
+            { id: "EENG2310", label: "EENG 2310", name: "Circuit Analysis I", credits: 3, cat: "electrical", sem: 3, prereqs: ["PHYS2112","MATH2000"], coreqs: [] },
+            { id: "ENGR2310", label: "ENGR 2310", name: "Statics", credits: 3, cat: "engr_core", sem: 3, prereqs: ["MATH1900","PHYS2111"], coreqs: [] },
+            { id: "MATH2000", label: "MATH 2000", name: "Calculus III", credits: 5, cat: "math", sem: 3, prereqs: ["MATH1900"], coreqs: [] },
+            { id: "PHYS2112", label: "PHYS 2112/L", name: "Physics II: E&M, Optics", credits: 5, cat: "physics", sem: 3, prereqs: ["PHYS2111","MATH1900"], coreqs: [] },
+            // Year 2 Spring
+            { id: "ENGR2320", label: "ENGR 2320", name: "Dynamics", credits: 3, cat: "engr_core", sem: 4, prereqs: ["ENGR2310"], coreqs: ["MATH2000"] },
+            { id: "ENGR2332", label: "ENGR 2332", name: "Mechanics of Materials", credits: 3, cat: "engr_core", sem: 4, prereqs: ["ENGR2310"], coreqs: [] },
+            { id: "ENGR2330", label: "ENGR 2330", name: "Intro to Thermodynamics", credits: 3, cat: "engr_core", sem: 4, prereqs: ["MATH1900","PHYS2112"], coreqs: [] },
+            { id: "CMPSCI1250", label: "CMP SCI 1250", name: "Intro to Computing", credits: 3, cat: "electrical", sem: 4, prereqs: [], coreqs: [] },
+            { id: "MATH2020", label: "MATH 2020", name: "Differential Equations", credits: 3, cat: "math", sem: 4, prereqs: ["MATH2000"], coreqs: [] },
+            // Year 3 Fall
+            { id: "MENG3370", label: "MENG 3370/L", name: "Fluid Mechanics + Lab", credits: 4, cat: "me_core", sem: 5, prereqs: ["MATH2020","ENGR2320","ENGR2330"], coreqs: [] },
+            { id: "MENG3330", label: "MENG 3330", name: "Instrumentation & Measurement", credits: 3, cat: "me_core", sem: 5, prereqs: ["EENG2310"], coreqs: [] },
+            { id: "ENGR3300", label: "ENGR 3300", name: "Applied Thermodynamics", credits: 3, cat: "me_core", sem: 5, prereqs: ["ENGR2330"], coreqs: [] },
+            { id: "ENGL3130", label: "ENGL 3130", name: "Technical Writing", credits: 3, cat: "gen_ed", sem: 5, prereqs: ["ENGL1100"], coreqs: [] },
+            { id: "PHIL2259", label: "PHIL 2259", name: "Engineering Ethics", credits: 3, cat: "gen_ed", sem: 5, prereqs: [], coreqs: [] },
+            // Year 3 Spring
+            { id: "MENG3340", label: "MENG 3340", name: "Properties of Material & Testing", credits: 3, cat: "me_core", sem: 6, prereqs: ["ENGR2332"], coreqs: [] },
+            { id: "MENG3350", label: "MENG 3350/L", name: "System Dynamics & Control + Lab", credits: 4, cat: "me_core", sem: 6, prereqs: ["MATH2020","ENGR2320","CMPSCI1250"], coreqs: [] },
+            { id: "MENG3360", label: "MENG 3360", name: "Machine Design & Manufacturing", credits: 3, cat: "me_core", sem: 6, prereqs: ["ENGR2332"], coreqs: ["MENG3340"] },
+            { id: "MENG3380", label: "MENG 3380/L", name: "Heat Transfer + Lab", credits: 4, cat: "me_core", sem: 6, prereqs: ["MATH2020","MENG3370"], coreqs: [] },
+            { id: "MENG3390", label: "MENG 3390", name: "Product Dev. & Prototyping Lab", credits: 1, cat: "me_core", sem: 6, prereqs: ["ENGR2332"], coreqs: [] },
+            { id: "GE_SS1", label: "Explore SS", name: "Social Sciences (Global)", credits: 3, cat: "gen_ed", sem: 6, prereqs: [], coreqs: [] },
+            // Year 4 Fall
+            { id: "MENG4440", label: "MENG 4440", name: "Intro to Composite Materials", credits: 3, cat: "me_advanced", sem: 7, prereqs: ["MENG3340"], coreqs: [] },
+            { id: "MENG4980", label: "MENG 4980", name: "Senior Design I (Capstone)", credits: 2, cat: "capstone", sem: 7, prereqs: ["MENG3360","MENG3380"], coreqs: [] },
+            { id: "ENGR4400", label: "ENGR 4400", name: "FE Exam Review", credits: 1, cat: "engr_core", sem: 7, prereqs: [], coreqs: [] },
+            { id: "ENGR2022", label: "ENGR 2022", name: "Engineering Economics & PM", credits: 3, cat: "engr_core", sem: 7, prereqs: [], coreqs: [] },
+            { id: "GE_HFA1", label: "Explore HFA", name: "Humanities & Fine Arts", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            { id: "GE_COMM", label: "Core Comm", name: "Communication Proficiency", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            // Year 4 Spring
+            { id: "MENG4990", label: "MENG 4990", name: "Senior Design II (Capstone)", credits: 2, cat: "capstone", sem: 8, prereqs: ["MENG4980"], coreqs: [] },
+            { id: "MENG4490", label: "MENG 4490", name: "Advanced Manufacturing", credits: 3, cat: "me_advanced", sem: 8, prereqs: ["MENG3390"], coreqs: [] },
+            { id: "MENG4450", label: "MENG 4450", name: "Computational Fluid Dynamics", credits: 3, cat: "me_advanced", sem: 8, prereqs: ["MENG3370","MENG3380"], coreqs: [] },
+            { id: "MENG4460", label: "MENG 4460", name: "Renewable Energy Systems Lab", credits: 1, cat: "me_advanced", sem: 8, prereqs: ["MENG3370"], coreqs: [] },
+            { id: "GE_SS2", label: "Explore SS", name: "Social Sciences", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "GE_HFA2", label: "Explore HFA", name: "Humanities & Fine Arts", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            // Stats elective
+            { id: "MATH1320", label: "MATH 1320", name: "Intro to Probability & Statistics", credits: 3, cat: "math", sem: 3, prereqs: [], coreqs: [] },
+        ],
+        equivalents: {}
+    },
+    mst: {
+        name: "Missouri S&T",
+        fullName: "Missouri University of Science and Technology",
+        totalCredits: 128,
+        courses: [
+            // Year 1 Fall
+            { id: "FRENG1100", label: "FR ENG 1100", name: "Freshman Engineering", credits: 1, cat: "engr_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CHEM1305", label: "CHEM 1305", name: "General Chemistry", credits: 4, cat: "chemistry", sem: 1, prereqs: [], coreqs: [] },
+            { id: "ENGLISH1120", label: "ENGLISH 1120", name: "Composition I", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            { id: "HIST_SS", label: "HIST/POLSCI", name: "History or Pol Sci", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            { id: "MATH1214", label: "MATH 1214", name: "Calculus I", credits: 4, cat: "math", sem: 1, prereqs: [], coreqs: [] },
+            { id: "GE_ELEC1", label: "Gen Ed", name: "General Education Elective", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            // Year 1 Spring
+            { id: "ME1720", label: "MECH ENG 1720", name: "Intro to Engineering Design", credits: 3, cat: "engr_core", sem: 2, prereqs: [], coreqs: [] },
+            { id: "PHYS1135", label: "PHYSICS 1135", name: "Engineering Physics I", credits: 4, cat: "physics", sem: 2, prereqs: ["MATH1214"], coreqs: [] },
+            { id: "MATH1215", label: "MATH 1215", name: "Calculus II", credits: 4, cat: "math", sem: 2, prereqs: ["MATH1214"], coreqs: [] },
+            { id: "CHEM1319", label: "CHEM 1319", name: "Engineering Chemistry Lab", credits: 1, cat: "chemistry", sem: 2, prereqs: ["CHEM1305"], coreqs: [] },
+            { id: "GE_ELEC2", label: "Gen Ed", name: "General Education Elective", credits: 3, cat: "gen_ed", sem: 2, prereqs: [], coreqs: [] },
+            // Year 2 Fall
+            { id: "MATH2222", label: "MATH 2222", name: "Calculus III", credits: 4, cat: "math", sem: 3, prereqs: ["MATH1215"], coreqs: [] },
+            { id: "CIVENG2200", label: "CIV ENG 2200", name: "Statics", credits: 3, cat: "engr_core", sem: 3, prereqs: ["PHYS1135"], coreqs: ["MATH2222"] },
+            { id: "PHYS2135", label: "PHYSICS 2135", name: "Engineering Physics II", credits: 4, cat: "physics", sem: 3, prereqs: ["PHYS1135","MATH1215"], coreqs: [] },
+            { id: "ME2653", label: "MECH ENG 2653", name: "Intro to Manufacturing", credits: 3, cat: "me_core", sem: 3, prereqs: ["ME1720","PHYS1135"], coreqs: ["ME1761"] },
+            { id: "ME1761", label: "MECH ENG 1761", name: "Intro to CAD", credits: 1, cat: "me_core", sem: 3, prereqs: ["ME1720","MATH1214"], coreqs: [] },
+            // Year 2 Spring
+            { id: "ME2761", label: "MECH ENG 2761", name: "Intro to Mechanical Design", credits: 2, cat: "me_core", sem: 4, prereqs: ["ME1720","ME1761","ME2653"], coreqs: ["CIVENG2200"] },
+            { id: "ME2519", label: "MECH ENG 2519", name: "Thermodynamics", credits: 3, cat: "me_core", sem: 4, prereqs: ["MATH1214","MATH1215","MATH2222","PHYS1135"], coreqs: [] },
+            { id: "ME2360", label: "MECH ENG 2360", name: "Dynamics", credits: 3, cat: "engr_core", sem: 4, prereqs: ["CIVENG2200","MATH2222"], coreqs: [] },
+            { id: "MATH3304", label: "MATH 3304", name: "Differential Equations", credits: 3, cat: "math", sem: 4, prereqs: ["MATH2222"], coreqs: [] },
+            { id: "METENG2110", label: "MET ENG 2110", name: "Materials Science", credits: 3, cat: "me_core", sem: 4, prereqs: ["CHEM1305","PHYS1135"], coreqs: [] },
+            { id: "PROG_ELEC", label: "CS Elective", name: "Programming Elective", credits: 3, cat: "electrical", sem: 4, prereqs: [], coreqs: [] },
+            // Year 3 Fall
+            { id: "ME3313", label: "MECH ENG 3313", name: "Machine Dynamics", credits: 3, cat: "me_core", sem: 5, prereqs: ["PROG_ELEC","ME2360"], coreqs: [] },
+            { id: "ME3521", label: "MECH ENG 3521", name: "Applied Thermodynamics", credits: 3, cat: "me_core", sem: 5, prereqs: ["ME2519"], coreqs: [] },
+            { id: "ELECENG2800", label: "ELEC ENG 2800", name: "Electrical Circuits", credits: 3, cat: "electrical", sem: 5, prereqs: ["PHYS2135","MATH2222"], coreqs: [] },
+            { id: "CIVENG2210", label: "CIV ENG 2210", name: "Stress Analysis", credits: 3, cat: "engr_core", sem: 5, prereqs: ["CIVENG2200","MATH2222"], coreqs: [] },
+            { id: "CIVENG2211", label: "CIV ENG 2211", name: "Stress Analysis Lab", credits: 1, cat: "engr_core", sem: 5, prereqs: ["CIVENG2200"], coreqs: ["CIVENG2210"] },
+            { id: "ADV_MATH", label: "Adv Math/Stat", name: "Advanced Math/Stat Elective", credits: 3, cat: "math", sem: 5, prereqs: [], coreqs: [] },
+            // Year 3 Spring
+            { id: "ME3411", label: "MECH ENG 3411", name: "Modeling & Analysis Dynamic Systems", credits: 3, cat: "me_core", sem: 6, prereqs: ["PROG_ELEC","ME2360","MATH3304","PHYS2135"], coreqs: [] },
+            { id: "ME3131", label: "MECH ENG 3131", name: "Thermofluid Mechanics I", credits: 3, cat: "me_core", sem: 6, prereqs: ["ME2519"], coreqs: [] },
+            { id: "ME4840", label: "MECH ENG 4840", name: "Mechanical Instrumentation", credits: 2, cat: "me_core", sem: 6, prereqs: ["MATH3304","ME2519","PHYS2135"], coreqs: [] },
+            { id: "ME3708", label: "MECH ENG 3708", name: "Machine Design I", credits: 3, cat: "me_core", sem: 6, prereqs: ["ME2653","METENG2110","CIVENG2210"], coreqs: ["ME2761"] },
+            { id: "ME3525", label: "MECH ENG 3525", name: "Heat Transfer", credits: 3, cat: "me_core", sem: 6, prereqs: ["PROG_ELEC","MATH3304","ME2519"], coreqs: [] },
+            { id: "COMM_ELEC", label: "Comm Elective", name: "Communication Elective", credits: 3, cat: "gen_ed", sem: 6, prereqs: [], coreqs: [] },
+            // Year 4 Fall
+            { id: "ME4842", label: "MECH ENG 4842", name: "ME Systems Lab", credits: 2, cat: "me_core", sem: 7, prereqs: ["ME4840","ME3521","ME3131","ME3525","ME3313"], coreqs: [] },
+            { id: "ME4479", label: "MECH ENG 4479", name: "Automatic Control", credits: 3, cat: "me_core", sem: 7, prereqs: ["ME3411"], coreqs: [] },
+            { id: "ME4761", label: "MECH ENG 4761", name: "Engineering Design (Capstone)", credits: 3, cat: "capstone", sem: 7, prereqs: [], coreqs: ["ME3708","ME3525","ME3131","ME4479"] },
+            { id: "TECH_ELEC1", label: "Tech Elec", name: "ME Technical Elective", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            { id: "TECH_ELEC2", label: "Tech Elec", name: "Technical Elective", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            { id: "GE_ELEC3", label: "Gen Ed", name: "General Education Elective", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            // Year 4 Spring
+            { id: "ENGMGT1100", label: "ENG MGT 1100", name: "Practical Concepts for Mgrs", credits: 1, cat: "engr_core", sem: 8, prereqs: [], coreqs: [] },
+            { id: "ENGMGT1210", label: "ENG MGT 1210", name: "Engineering Management", credits: 2, cat: "engr_core", sem: 8, prereqs: [], coreqs: [] },
+            { id: "ME4480", label: "MECH ENG 4480", name: "Control System Lab", credits: 1, cat: "me_core", sem: 8, prereqs: [], coreqs: ["ME4479"] },
+            { id: "TECH_ELEC3", label: "5000-level Elec", name: "5000-level ME Elective", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+            { id: "BREADTH_ELEC", label: "Breadth Elec", name: "Breadth Elective", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "GE_ELEC4", label: "Gen Ed", name: "General Education Elective", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+        ],
+        equivalents: {}
+    },
+    siue: {
+        name: "SIUE",
+        fullName: "Southern Illinois University Edwardsville",
+        totalCredits: 129,
+        courses: [
+            // Year 1 Fall
+            { id: "IE106", label: "IE 106", name: "Engineering Problem Solving", credits: 3, cat: "engr_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CHEM131", label: "CHEM 131/135", name: "Engineering Chemistry + Lab", credits: 4, cat: "chemistry", sem: 1, prereqs: [], coreqs: [] },
+            { id: "ENG101", label: "ENG 101", name: "English Composition I", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            { id: "MATH150", label: "MATH 150", name: "Calculus I", credits: 5, cat: "math", sem: 1, prereqs: [], coreqs: [] },
+            { id: "FST101", label: "FST 101", name: "Succeeding at SIUE", credits: 1, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            // Year 1 Spring
+            { id: "ENG102", label: "ENG 102", name: "English Composition II", credits: 3, cat: "gen_ed", sem: 2, prereqs: ["ENG101"], coreqs: [] },
+            { id: "ACS103", label: "ACS 103", name: "Interpersonal Communications", credits: 3, cat: "gen_ed", sem: 2, prereqs: [], coreqs: [] },
+            { id: "MATH152", label: "MATH 152", name: "Calculus II", credits: 5, cat: "math", sem: 2, prereqs: ["MATH150"], coreqs: [] },
+            { id: "PHYS141", label: "PHYS 141/151L", name: "Physics I + Lab", credits: 4, cat: "physics", sem: 2, prereqs: ["MATH150"], coreqs: [] },
+            // Year 2 Fall
+            { id: "CE204", label: "CE 204", name: "Engineering Graphics & CAD", credits: 3, cat: "engr_core", sem: 3, prereqs: ["IE106"], coreqs: [] },
+            { id: "CE240", label: "CE 240", name: "Statics", credits: 3, cat: "engr_core", sem: 3, prereqs: ["PHYS141","MATH152"], coreqs: [] },
+            { id: "MATH250", label: "MATH 250", name: "Calculus III", credits: 4, cat: "math", sem: 3, prereqs: ["MATH152"], coreqs: [] },
+            { id: "PHYS142", label: "PHYS 142/152L", name: "Physics II + Lab", credits: 4, cat: "physics", sem: 3, prereqs: ["PHYS141","MATH152"], coreqs: [] },
+            // Year 2 Spring
+            { id: "ME262", label: "ME 262", name: "Dynamics", credits: 3, cat: "engr_core", sem: 4, prereqs: ["CE240","MATH250"], coreqs: [] },
+            { id: "CE242", label: "CE 242", name: "Mechanics of Solids", credits: 3, cat: "engr_core", sem: 4, prereqs: ["CE240","MATH250"], coreqs: [] },
+            { id: "ECE210", label: "ECE 210", name: "Electrical Circuits", credits: 3, cat: "electrical", sem: 4, prereqs: ["PHYS142","MATH250"], coreqs: [] },
+            { id: "ECON111", label: "ECON 111", name: "Principles of Macroeconomics", credits: 3, cat: "gen_ed", sem: 4, prereqs: [], coreqs: [] },
+            { id: "MATH305", label: "MATH 305", name: "Differential Equations I", credits: 3, cat: "math", sem: 4, prereqs: ["MATH250"], coreqs: [] },
+            { id: "CS145", label: "CS 145", name: "Intro to Computing for Engineers", credits: 3, cat: "electrical", sem: 4, prereqs: ["MATH150"], coreqs: [] },
+            // Year 3 Fall
+            { id: "ME310", label: "ME 310", name: "Thermodynamics I", credits: 3, cat: "me_core", sem: 5, prereqs: ["PHYS141","MATH250"], coreqs: [] },
+            { id: "ME315", label: "ME 315", name: "Fluid Mechanics", credits: 3, cat: "me_core", sem: 5, prereqs: ["CE240","MATH305"], coreqs: [] },
+            { id: "ME350", label: "ME 350", name: "Dynamics of Mechanisms", credits: 3, cat: "me_core", sem: 5, prereqs: ["ME262","MATH305"], coreqs: [] },
+            { id: "ME354", label: "ME 354", name: "Numerical Simulation", credits: 1, cat: "me_core", sem: 5, prereqs: ["CS145","MATH305"], coreqs: [] },
+            { id: "ME370", label: "ME 370", name: "Materials Engineering", credits: 3, cat: "me_core", sem: 5, prereqs: ["CHEM131","PHYS141"], coreqs: [] },
+            { id: "GE_FPA", label: "Fine Arts", name: "Fine & Performing Arts", credits: 3, cat: "gen_ed", sem: 5, prereqs: [], coreqs: [] },
+            // Year 3 Spring
+            { id: "ME312", label: "ME 312", name: "Thermodynamics II", credits: 3, cat: "me_core", sem: 6, prereqs: ["ME310"], coreqs: [] },
+            { id: "ME356", label: "ME 356", name: "Dynamic Systems Modeling", credits: 3, cat: "me_core", sem: 6, prereqs: ["ME262","ECE210","MATH305"], coreqs: [] },
+            { id: "ME380", label: "ME 380/380L", name: "Design of Machine Elements + Lab", credits: 4, cat: "me_core", sem: 6, prereqs: ["CE242","ME370"], coreqs: [] },
+            { id: "PHIL323", label: "PHIL 323", name: "Engineering Ethics", credits: 3, cat: "gen_ed", sem: 6, prereqs: [], coreqs: [] },
+            { id: "STAT380", label: "STAT 380", name: "Statistics for Applications", credits: 3, cat: "math", sem: 6, prereqs: ["MATH152"], coreqs: [] },
+            // Year 4 Fall
+            { id: "ME410", label: "ME 410/410L", name: "Heat Transfer + Lab", credits: 4, cat: "me_core", sem: 7, prereqs: ["ME315","MATH305"], coreqs: [] },
+            { id: "ME482", label: "ME 482", name: "ME Design I (Capstone)", credits: 3, cat: "capstone", sem: 7, prereqs: ["ME380","ME350","ME315"], coreqs: [] },
+            { id: "ME_ELEC1", label: "ME Elective", name: "ME Technical Elective I", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            { id: "IE345", label: "IE 345", name: "Engineering Economic Analysis", credits: 3, cat: "engr_core", sem: 7, prereqs: [], coreqs: [] },
+            { id: "GE_IS", label: "IS/Equity", name: "Interdisciplinary/Equity", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            // Year 4 Spring
+            { id: "ME356L", label: "ME 356L", name: "Dynamic Systems Lab", credits: 1, cat: "me_core", sem: 8, prereqs: ["ME356"], coreqs: [] },
+            { id: "ME484", label: "ME 484", name: "ME Design II (Capstone)", credits: 3, cat: "capstone", sem: 8, prereqs: ["ME482"], coreqs: [] },
+            { id: "ME_ELEC2", label: "ME Elective", name: "ME Technical Elective II", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+            { id: "ME_ELEC3", label: "ME Elective", name: "ME Technical Elective III", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+            { id: "GE_LIFE", label: "Life Sci", name: "Breadth Life Science", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "ENG_ELEC", label: "Eng Elective", name: "Engineering Elective", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+        ],
+        equivalents: {}
+    },
+    slu: {
+        name: "SLU",
+        fullName: "Saint Louis University",
+        totalCredits: 129,
+        courses: [
+            // Year 1 Fall
+            { id: "SE1700", label: "SE 1700/1701", name: "Engineering Fundamentals & Studio", credits: 3, cat: "engr_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "MENG1011", label: "MENG 1011", name: "Prototyping", credits: 1, cat: "me_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "MATH1510", label: "MATH 1510", name: "Calculus I", credits: 4, cat: "math", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CHEM1110", label: "CHEM 1110/1115", name: "General Chemistry + Lab", credits: 4, cat: "chemistry", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CORE1500", label: "CORE 1500", name: "Theological Foundations", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            { id: "CORE_EQ", label: "CORE Equity", name: "Equity/Global", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            // Year 1 Spring
+            { id: "MENG1000", label: "MENG 1000", name: "Design Thinking", credits: 3, cat: "me_core", sem: 2, prereqs: [], coreqs: [] },
+            { id: "CSCI1060", label: "CSCI 1060", name: "Scientific Programming", credits: 3, cat: "electrical", sem: 2, prereqs: [], coreqs: [] },
+            { id: "MATH1520", label: "MATH 1520", name: "Calculus II", credits: 4, cat: "math", sem: 2, prereqs: ["MATH1510"], coreqs: [] },
+            { id: "PHYS1610", label: "PHYS 1610/1620", name: "University Physics I + Lab", credits: 4, cat: "physics", sem: 2, prereqs: ["MATH1510"], coreqs: [] },
+            { id: "CORE1600", label: "CORE 1600", name: "Philosophical Foundations", credits: 3, cat: "gen_ed", sem: 2, prereqs: [], coreqs: [] },
+            // Year 2 Fall
+            { id: "ECE1100", label: "ECE 1100", name: "Electrical Engineering 101", credits: 2, cat: "electrical", sem: 3, prereqs: ["PHYS1610"], coreqs: [] },
+            { id: "ECE1200", label: "ECE 1200", name: "Computer Engineering 101", credits: 2, cat: "electrical", sem: 3, prereqs: [], coreqs: [] },
+            { id: "PHYS1630", label: "PHYS 1630/1640", name: "University Physics II + Lab", credits: 4, cat: "physics", sem: 3, prereqs: ["PHYS1610","MATH1520"], coreqs: [] },
+            { id: "MENG2100X", label: "MENG 2100X", name: "Statics", credits: 3, cat: "engr_core", sem: 3, prereqs: ["PHYS1610","MATH1520"], coreqs: [] },
+            { id: "MATH2530", label: "MATH 2530", name: "Calculus III", credits: 4, cat: "math", sem: 3, prereqs: ["MATH1520"], coreqs: [] },
+            // Year 2 Spring
+            { id: "MENG2310", label: "MENG 2310", name: "Thermodynamics", credits: 3, cat: "me_core", sem: 4, prereqs: ["PHYS1610","MATH2530"], coreqs: [] },
+            { id: "MENG3105", label: "MENG 3105", name: "Mechanics of Solids", credits: 3, cat: "engr_core", sem: 4, prereqs: ["MENG2100X","MATH2530"], coreqs: [] },
+            { id: "MATH3550", label: "MATH 3550", name: "Differential Equations", credits: 3, cat: "math", sem: 4, prereqs: ["MATH2530"], coreqs: [] },
+            { id: "MENG2400", label: "MENG 2400", name: "Mechatronics Systems Design", credits: 3, cat: "me_core", sem: 4, prereqs: ["ECE1100","ECE1200"], coreqs: [] },
+            { id: "MENG2450", label: "MENG 2450", name: "Engineering Experimentation", credits: 3, cat: "me_core", sem: 4, prereqs: ["PHYS1610"], coreqs: [] },
+            { id: "CORE1900", label: "CORE 1900", name: "Social & Behavioral Sciences", credits: 3, cat: "gen_ed", sem: 4, prereqs: [], coreqs: [] },
+            // Year 3 Fall
+            { id: "MENG3510X", label: "MENG 3510X", name: "Materials Science", credits: 3, cat: "me_core", sem: 5, prereqs: ["CHEM1110","PHYS1610"], coreqs: [] },
+            { id: "MENG2150", label: "MENG 2150", name: "Dynamics", credits: 3, cat: "engr_core", sem: 5, prereqs: ["MENG2100X","MATH2530"], coreqs: [] },
+            { id: "MENG3200", label: "MENG 3200", name: "Fluid Dynamics", credits: 3, cat: "me_core", sem: 5, prereqs: ["MENG2100X","MATH3550"], coreqs: [] },
+            { id: "CORE3400", label: "CORE 3400", name: "Ethics and Social Analysis", credits: 3, cat: "gen_ed", sem: 5, prereqs: [], coreqs: [] },
+            { id: "TECH_ELEC1_SLU", label: "Tech Elec", name: "Technical Elective 1", credits: 3, cat: "me_advanced", sem: 5, prereqs: [], coreqs: [] },
+            { id: "CORE3600", label: "CORE 3600", name: "Faith & Reason", credits: 3, cat: "gen_ed", sem: 5, prereqs: [], coreqs: [] },
+            // Year 3 Spring
+            { id: "MENG3010", label: "MENG 3010", name: "Machine Design", credits: 3, cat: "me_core", sem: 6, prereqs: ["MENG3105","MENG3510X"], coreqs: [] },
+            { id: "MENG3110", label: "MENG 3110", name: "Linear Vibrations", credits: 3, cat: "me_core", sem: 6, prereqs: ["MENG2150","MATH3550"], coreqs: [] },
+            { id: "MENG3600", label: "MENG 3600", name: "Manufacturing Process", credits: 3, cat: "me_core", sem: 6, prereqs: ["MENG3510X"], coreqs: [] },
+            { id: "MENG3111", label: "MENG 3111", name: "Mechanics Laboratory", credits: 1, cat: "me_core", sem: 6, prereqs: ["MENG3105"], coreqs: [] },
+            { id: "MENG4300", label: "MENG 4300", name: "Heat Transfer", credits: 3, cat: "me_core", sem: 6, prereqs: ["MENG3200","MATH3550"], coreqs: [] },
+            { id: "TECH_ELEC2_SLU", label: "Tech Elec", name: "Technical Elective 2", credits: 3, cat: "me_advanced", sem: 6, prereqs: [], coreqs: [] },
+            // Year 4 Fall
+            { id: "MENG4304", label: "MENG 4304", name: "Thermal Systems Design", credits: 3, cat: "me_core", sem: 7, prereqs: ["MENG2310","MENG4300"], coreqs: [] },
+            { id: "MENG4450_SLU", label: "MENG 4450", name: "PLC & Robotics", credits: 3, cat: "me_advanced", sem: 7, prereqs: ["MENG2400"], coreqs: [] },
+            { id: "CORE1200", label: "CORE 1200", name: "Literary Analysis", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            { id: "TECH_ELEC3_SLU", label: "Tech Elec", name: "Technical Elective 3", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            // Year 4 Spring
+            { id: "MENG4024", label: "MENG 4024", name: "Mechanical Systems Design (Capstone)", credits: 3, cat: "capstone", sem: 8, prereqs: ["MENG3010"], coreqs: [] },
+            { id: "MENG3001", label: "MENG 3001", name: "ME Lab", credits: 1, cat: "me_core", sem: 8, prereqs: [], coreqs: [] },
+            { id: "CORE1700", label: "CORE 1700", name: "Historical Knowledge", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "TECH_ELEC4_SLU", label: "Tech Elec", name: "Technical Elective 4", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+            { id: "MATH_SCI_ELEC", label: "Math/Sci Elec", name: "Math/Science Elective", credits: 3, cat: "math", sem: 8, prereqs: [], coreqs: [] },
+        ],
+        equivalents: {}
+    }
+};
+
+// Cross-school equivalents mapping (UMSL-centric)
+const equivalentMap = {
+    "MATH1800": { mst: "MATH1214", siue: "MATH150", slu: "MATH1510" },
+    "MATH1900": { mst: "MATH1215", siue: "MATH152", slu: "MATH1520" },
+    "MATH2000": { mst: "MATH2222", siue: "MATH250", slu: "MATH2530" },
+    "MATH2020": { mst: "MATH3304", siue: "MATH305", slu: "MATH3550" },
+    "PHYS2111": { mst: "PHYS1135", siue: "PHYS141", slu: "PHYS1610" },
+    "PHYS2112": { mst: "PHYS2135", siue: "PHYS142", slu: "PHYS1630" },
+    "CHEM_ENG": { mst: "CHEM1305", siue: "CHEM131", slu: "CHEM1110" },
+    "ENGR2310": { mst: "CIVENG2200", siue: "CE240", slu: "MENG2100X" },
+    "ENGR2320": { mst: "ME2360", siue: "ME262", slu: "MENG2150" },
+    "ENGR2332": { mst: "CIVENG2210", siue: "CE242", slu: "MENG3105" },
+    "ENGR2330": { mst: "ME2519", siue: "ME310", slu: "MENG2310" },
+    "MENG3370": { mst: "ME3131", siue: "ME315", slu: "MENG3200" },
+    "MENG3380": { mst: "ME3525", siue: "ME410", slu: "MENG4300" },
+    "MENG3340": { mst: "METENG2110", siue: "ME370", slu: "MENG3510X" },
+    "MENG3350": { mst: "ME3411", siue: "ME356", slu: "MENG3110" },
+    "MENG3360": { mst: "ME3708", siue: "ME380", slu: "MENG3010" },
+    "MENG3330": { mst: "ME4840", siue: null, slu: "MENG2450" },
+    "ENGR3300": { mst: "ME3521", siue: "ME312", slu: null },
+    "EENG2310": { mst: "ELECENG2800", siue: "ECE210", slu: "ECE1100" },
+    "CMPSCI1250": { mst: "PROG_ELEC", siue: "CS145", slu: "CSCI1060" },
+    "MENG4980": { mst: "ME4761", siue: "ME482", slu: "MENG4024" },
+    "MENG4990": { mst: "ME4761", siue: "ME484", slu: "MENG4024" },
+    "MENG1204": { mst: "ME1761", siue: "CE204", slu: "MENG1011" },
+    "ENGR2022": { mst: "ENGMGT1210", siue: "IE345", slu: null },
+};
+
+// ============================================================
+// GRAPH RENDERING
+// ============================================================
+
+let currentSchool = 'umsl';
+let activeCategories = new Set(Object.keys(CATEGORIES));
+let selectedCourse = null;
+let svg, g, zoom;
+
+const NODE_WIDTH = 130;
+const NODE_HEIGHT = 52;
+const H_SPACING = 190;
+const V_SPACING = 80;
+const MARGIN = { top: 60, left: 80 };
+
+function init() {
+    setupSidebar();
+    setupGraph();
+    renderSchool(currentSchool);
+}
+
+function setupSidebar() {
+    // Legend
+    const legend = document.getElementById('legend');
+    Object.entries(CATEGORIES).forEach(([key, val]) => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `<div class="legend-color" style="background:${val.color}"></div>${val.label}`;
+        legend.appendChild(item);
+    });
+
+    // Filter chips
+    const chips = document.getElementById('filter-chips');
+    Object.entries(CATEGORIES).forEach(([key, val]) => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip active';
+        chip.textContent = val.label;
+        chip.dataset.cat = key;
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('active');
+            if (chip.classList.contains('active')) activeCategories.add(key);
+            else activeCategories.delete(key);
+            renderSchool(currentSchool);
+        });
+        chips.appendChild(chip);
+    });
+
+    // Toggle All / None filters
+    let allFiltersOn = true;
+    document.getElementById('btn-toggle-filters').addEventListener('click', () => {
+        allFiltersOn = !allFiltersOn;
+        document.querySelectorAll('.filter-chip[data-cat]').forEach(chip => {
+            if (allFiltersOn) {
+                chip.classList.add('active');
+                activeCategories.add(chip.dataset.cat);
+            } else {
+                chip.classList.remove('active');
+                activeCategories.delete(chip.dataset.cat);
+            }
+        });
+        document.getElementById('btn-toggle-filters').textContent = allFiltersOn ? 'All' : 'None';
+        renderSchool(currentSchool);
+    });
+
+    // School tabs
+    document.querySelectorAll('.school-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.school-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentSchool = tab.dataset.school;
+            selectedCourse = null;
+            renderSchool(currentSchool);
+            updateDetail(null);
+        });
+    });
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        const q = e.target.value.toLowerCase();
+        d3.selectAll('.node').classed('dimmed', d => {
+            if (!q) return false;
+            return !(d.label.toLowerCase().includes(q) || d.name.toLowerCase().includes(q));
+        });
+    });
+}
+
+function setupGraph() {
+    svg = d3.select('#graph');
+    g = svg.append('g');
+
+    zoom = d3.zoom()
+        .scaleExtent([0.3, 3])
+        .on('zoom', (event) => g.attr('transform', event.transform));
+
+    svg.call(zoom);
+
+    // Controls
+    document.getElementById('btn-zoom-in').addEventListener('click', () => svg.transition().call(zoom.scaleBy, 1.3));
+    document.getElementById('btn-zoom-out').addEventListener('click', () => svg.transition().call(zoom.scaleBy, 0.7));
+    document.getElementById('btn-fit').addEventListener('click', fitToScreen);
+    document.getElementById('btn-reset').addEventListener('click', () => {
+        selectedCourse = null;
+        updateDetail(null, currentSchool);
+        document.getElementById('search-input').value = '';
+        d3.selectAll('.node').classed('dimmed', false).classed('highlighted', false);
+        d3.selectAll('.link').classed('dimmed', false).classed('highlighted', false);
+        fitToScreen();
+    });
+
+    document.getElementById('btn-theme').addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light');
+        document.getElementById('btn-theme').textContent = isLight ? 'Dark Mode' : 'Light Mode';
+        // Update link colors for theme
+        renderSchool(currentSchool);
+    });
+}
+
+function renderSchool(schoolKey) {
+    const school = schools[schoolKey];
+    g.selectAll('*').remove();
+
+    // Filter courses
+    const courses = school.courses.filter(c => activeCategories.has(c.cat));
+    const courseIds = new Set(courses.map(c => c.id));
+
+    // Layout: organize by semester (columns) and position within semester
+    const semGroups = {};
+    courses.forEach(c => {
+        if (!semGroups[c.sem]) semGroups[c.sem] = [];
+        semGroups[c.sem].push(c);
+    });
+
+    // Position nodes
+    const positions = {};
+    Object.entries(semGroups).forEach(([sem, group]) => {
+        const semIdx = parseInt(sem) - 1;
+        group.forEach((c, i) => {
+            positions[c.id] = {
+                x: MARGIN.left + semIdx * H_SPACING,
+                y: MARGIN.top + i * V_SPACING
+            };
+        });
+    });
+
+    // Draw semester labels
+    const semLabels = ['Year 1\nFall', 'Year 1\nSpring', 'Year 2\nFall', 'Year 2\nSpring', 'Year 3\nFall', 'Year 3\nSpring', 'Year 4\nFall', 'Year 4\nSpring'];
+    semLabels.forEach((label, i) => {
+        const lines = label.split('\n');
+        g.append('text')
+            .attr('class', 'year-label no-select')
+            .attr('x', MARGIN.left + i * H_SPACING + NODE_WIDTH / 2)
+            .attr('y', 25)
+            .attr('text-anchor', 'middle')
+            .text(lines[0]);
+        g.append('text')
+            .attr('class', 'semester-label no-select')
+            .attr('x', MARGIN.left + i * H_SPACING + NODE_WIDTH / 2)
+            .attr('y', 42)
+            .attr('text-anchor', 'middle')
+            .text(lines[1]);
+    });
+
+    // Draw arrows (defs)
+    svg.select('defs')?.remove();
+    const defs = svg.append('defs');
+    defs.append('marker')
+        .attr('id', 'arrowhead')
+        .attr('viewBox', '0 0 10 10')
+        .attr('refX', 10)
+        .attr('refY', 5)
+        .attr('markerWidth', 4)
+        .attr('markerHeight', 4)
+        .attr('orient', 'auto')
+        .append('path')
+        .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+        .attr('fill', document.body.classList.contains('light') ? '#57606a' : '#c9d1d9');
+
+    // Draw links
+    const links = [];
+    courses.forEach(c => {
+        c.prereqs.forEach(p => {
+            if (courseIds.has(p) && positions[p] && positions[c.id]) {
+                links.push({ source: p, target: c.id, type: 'prerequisite' });
+            }
+        });
+        c.coreqs.forEach(p => {
+            if (courseIds.has(p) && positions[p] && positions[c.id]) {
+                links.push({ source: p, target: c.id, type: 'corequisite' });
+            }
+        });
+    });
+
+    const linkG = g.selectAll('.link')
+        .data(links)
+        .enter()
+        .append('path')
+        .attr('class', d => `link ${d.type === 'corequisite' ? 'corequisite' : ''}`)
+        .attr('stroke', d => {
+            const isLight = document.body.classList.contains('light');
+            if (d.type === 'corequisite') return isLight ? '#d4a017' : '#ffd700';
+            return isLight ? '#57606a' : '#8b949e';
+        })
+        .attr('marker-end', 'url(#arrowhead)')
+        .attr('d', d => {
+            const s = positions[d.source];
+            const t = positions[d.target];
+            if (!s || !t) return '';
+            const sx = s.x + NODE_WIDTH;
+            const sy = s.y + NODE_HEIGHT / 2;
+            const tx = t.x;
+            const ty = t.y + NODE_HEIGHT / 2;
+            const mx = (sx + tx) / 2;
+            return `M${sx},${sy} C${mx},${sy} ${mx},${ty} ${tx},${ty}`;
+        })
+        .attr('data-source', d => d.source)
+        .attr('data-target', d => d.target);
+
+    // Draw nodes
+    const nodeG = g.selectAll('.node')
+        .data(courses)
+        .enter()
+        .append('g')
+        .attr('class', 'node')
+        .attr('transform', d => `translate(${positions[d.id].x},${positions[d.id].y})`)
+        .on('click', (event, d) => {
+            selectedCourse = d;
+            highlightPath(d, courses, links);
+            updateDetail(d, schoolKey);
+        });
+
+    nodeG.append('rect')
+        .attr('width', NODE_WIDTH)
+        .attr('height', NODE_HEIGHT)
+        .attr('fill', d => CATEGORIES[d.cat]?.color + '20')
+        .attr('stroke', d => CATEGORIES[d.cat]?.color);
+
+    nodeG.append('text')
+        .attr('x', NODE_WIDTH / 2)
+        .attr('y', 18)
+        .attr('text-anchor', 'middle')
+        .text(d => d.label);
+
+    nodeG.append('text')
+        .attr('class', 'course-name')
+        .attr('x', NODE_WIDTH / 2)
+        .attr('y', 31)
+        .attr('text-anchor', 'middle')
+        .text(d => d.name.length > 18 ? d.name.substring(0, 17) + '...' : d.name);
+
+    nodeG.append('text')
+        .attr('class', 'course-name')
+        .attr('x', NODE_WIDTH / 2)
+        .attr('y', 43)
+        .attr('text-anchor', 'middle')
+        .text(d => `${d.credits} cr`);
+
+    // Stats
+    const totalCr = courses.reduce((sum, c) => sum + c.credits, 0);
+    document.getElementById('stats-bar').innerHTML = `
+        <div>Courses: <span>${courses.length}</span></div>
+        <div>Credits: <span>${totalCr}</span></div>
+        <div>Program Total: <span>${school.totalCredits}</span></div>
+    `;
+
+    setTimeout(fitToScreen, 100);
+}
+
+function highlightPath(course, allCourses, links) {
+    const upstream = new Set();
+    const downstream = new Set();
+
+    function findUpstream(id) {
+        const c = allCourses.find(x => x.id === id);
+        if (!c) return;
+        c.prereqs.forEach(p => { upstream.add(p); findUpstream(p); });
+        c.coreqs.forEach(p => { upstream.add(p); findUpstream(p); });
+    }
+    function findDownstream(id) {
+        allCourses.forEach(c => {
+            if (c.prereqs.includes(id) || c.coreqs.includes(id)) {
+                downstream.add(c.id);
+                findDownstream(c.id);
+            }
+        });
+    }
+
+    findUpstream(course.id);
+    findDownstream(course.id);
+
+    const related = new Set([course.id, ...upstream, ...downstream]);
+
+    d3.selectAll('.node')
+        .classed('highlighted', d => d.id === course.id)
+        .classed('dimmed', d => !related.has(d.id));
+
+    d3.selectAll('.link')
+        .classed('highlighted', function() {
+            const s = this.getAttribute('data-source');
+            const t = this.getAttribute('data-target');
+            return related.has(s) && related.has(t);
+        })
+        .classed('dimmed', function() {
+            const s = this.getAttribute('data-source');
+            const t = this.getAttribute('data-target');
+            return !(related.has(s) && related.has(t));
+        });
+}
+
+// ============================================================
+// SYLLABUS DATABASE (UMSL courses)
+// ============================================================
+const syllabusDB = {
+    "MATH1800": { desc: "Limits, derivatives, integrals of single-variable functions. Applications to rates of change, optimization, and area.",
+        sos: [1], topics: [["Limits & continuity",6],["Derivatives & rules",8],["Applications of derivatives",8],["Integration fundamentals",8],["Applications of integrals",6]], textbook: "Thomas' Calculus (15th ed.)" },
+    "MATH1900": { desc: "Techniques of integration, sequences, series, parametric equations, polar coordinates.",
+        sos: [1], topics: [["Integration techniques",8],["Improper integrals",4],["Sequences & series",10],["Taylor/Maclaurin series",6],["Parametric & polar curves",6]], textbook: "Thomas' Calculus (15th ed.)" },
+    "MATH2000": { desc: "Vectors, partial derivatives, multiple integrals, vector calculus (Green's, Stokes', Divergence theorems).",
+        sos: [1], topics: [["Vectors & geometry of space",6],["Partial derivatives",8],["Multiple integrals",10],["Vector fields & line integrals",8],["Green's/Stokes'/Divergence",4]], textbook: "Thomas' Calculus (15th ed.)" },
+    "MATH2020": { desc: "First and second order ODEs, Laplace transforms, systems of ODEs, applications to engineering systems.",
+        sos: [1], topics: [["First-order ODEs",8],["Second-order linear ODEs",8],["Laplace transforms",8],["Systems of ODEs",6],["Engineering applications",6]], textbook: "Elementary Differential Equations (Boyce & DiPrima)" },
+    "MATH1320": { desc: "Descriptive statistics, probability, distributions, hypothesis testing, regression, confidence intervals.",
+        sos: [1], topics: [["Descriptive statistics",6],["Probability",6],["Distributions (normal, t, chi-sq)",8],["Hypothesis testing",8],["Regression & correlation",8]], textbook: "Probability & Statistics for Engineers (Walpole)" },
+    "PHYS2111": { desc: "Calculus-based mechanics: kinematics, Newton's laws, work-energy, momentum, rotational dynamics, oscillations, waves.",
+        sos: [1,6], topics: [["Kinematics (1D, 2D)",6],["Newton's laws",6],["Work & energy",6],["Momentum & collisions",4],["Rotational dynamics",8],["Oscillations & waves",6],["Lab experiments",12]], textbook: "University Physics (Young & Freedman)" },
+    "PHYS2112": { desc: "Calculus-based E&M: electric fields, Gauss's law, circuits, magnetism, induction, EM waves, optics.",
+        sos: [1,6], topics: [["Electric fields & Gauss's law",8],["Electric potential",4],["DC circuits",6],["Magnetism & Ampere's law",6],["Faraday's law & induction",4],["EM waves & optics",6],["Lab experiments",12]], textbook: "University Physics (Young & Freedman)" },
+    "CHEM_ENG": { desc: "Atomic structure, bonding, stoichiometry, thermochemistry, states of matter, solutions, equilibria — with engineering applications.",
+        sos: [1], topics: [["Atomic structure & bonding",6],["Stoichiometry",6],["Thermochemistry",6],["States of matter",6],["Solutions & equilibria",6],["Engineering applications",6]], textbook: "Chemistry for Engineers (Brown et al.)" },
+    "ENGR1414": { desc: "Engineering design process, project planning, teamwork, innovation, and systems integration through design-build-test projects.",
+        sos: [2,3,5], topics: [["Engineering design process",4],["Teamwork & project planning",2],["CAD basics & sketching",4],["Design-build-test project",8],["Technical communication",4],["AI literacy for engineers",2]], textbook: "None — project-based" },
+    "MENG1204": { desc: "Introduction to CAD using SolidWorks. 2D sketching, 3D solid modeling, assemblies, engineering drawings, 3D printing.",
+        sos: [2,7], topics: [["Parametric sketching",6],["Solid modeling",8],["Assemblies & mass properties",4],["Engineering drawings & GD&T",6],["3D printing intro",4]], textbook: "SolidWorks tutorials + Engineering Graphics (Bertoline)" },
+    "ENGR2310": { desc: "Equilibrium of particles and rigid bodies. Trusses, frames, centroids, distributed forces, friction, moments of inertia.",
+        sos: [1], topics: [["Particle equilibrium (2D/3D)",4],["Rigid body equilibrium",6],["Trusses & frames",6],["Distributed forces & centroids",8],["Friction",4],["Internal forces (V/M diagrams)",4],["Moments of inertia",4]], textbook: "Engineering Mechanics: Statics (Hibbeler)" },
+    "ENGR2320": { desc: "Kinematics and kinetics of particles and rigid bodies. Work-energy, impulse-momentum methods.",
+        sos: [1], topics: [["Particle kinematics",6],["Newton's laws / equations of motion",6],["Work-energy methods",6],["Impulse-momentum methods",6],["Rigid body kinematics",6],["Rigid body kinetics",6]], textbook: "Engineering Mechanics: Dynamics (Hibbeler)" },
+    "ENGR2330": { desc: "Properties of substances, first and second laws of thermodynamics, entropy, ideal gas applications.",
+        sos: [1], topics: [["Properties of pure substances",4],["First law (closed systems)",6],["First law (control volumes)",6],["Second law of thermodynamics",6],["Entropy",6],["Ideal gas applications",4]], textbook: "Thermodynamics: An Engineering Approach (Cengel & Boles)" },
+    "ENGR2332": { desc: "Stress and strain analysis in structural members. Axial, torsion, bending, shear, combined loading, deflection.",
+        sos: [1,6], topics: [["Stress & strain concepts",6],["Axial loading",4],["Torsion",4],["Bending stresses",8],["Transverse shear",4],["Combined loading / Mohr's circle",4],["Beam deflection",4],["Column buckling",2]], textbook: "Mechanics of Materials (Hibbeler)" },
+    "EENG2310": { desc: "DC and AC circuit analysis. Kirchhoff's laws, network theorems, transients, phasors, frequency response.",
+        sos: [1], topics: [["DC circuits, Ohm's law, KVL/KCL",8],["Thevenin/Norton theorems",4],["Capacitors & inductors",4],["Transient response",4],["AC steady-state (phasors)",8],["Frequency response / filters",4],["Op-amp circuits",4]], textbook: "Electric Circuits (Nilsson & Riedel)" },
+    "CMPSCI1250": { desc: "Python programming for engineers. Data analysis, visualization, intro ML concepts, AI tools.",
+        sos: [1,7], topics: [["Python fundamentals",8],["Data structures",4],["File I/O & data import",4],["NumPy/pandas for data analysis",6],["Plotting (matplotlib)",4],["Intro ML concepts",4],["AI tools for engineers",4],["ME application projects",2]], textbook: "Python for Engineers (custom materials)" },
+    "ENGR3300": { desc: "Power and refrigeration cycles, gas mixtures, psychrometrics, combustion, exergy analysis.",
+        sos: [1], topics: [["Vapor power cycles (Rankine)",6],["Gas power cycles (Otto, Diesel, Brayton)",6],["Refrigeration & heat pump cycles",4],["Gas mixtures",4],["Psychrometrics",4],["Combustion",6],["Exergy / availability",4]], textbook: "Thermodynamics (Cengel & Boles)" },
+    "MENG3330": { desc: "Measurement statistics, sensors, signal conditioning, data acquisition for ME applications.",
+        sos: [1,6], topics: [["Measurement statistics & uncertainty",6],["Sensors (temp, pressure, force, flow)",8],["Signal conditioning & filtering",4],["Data acquisition systems",6],["Strain gauges & Wheatstone bridge",4],["ME measurement applications",8]], textbook: "Measurement Systems (Figliola & Beasley)" },
+    "MENG3340": { desc: "Crystal structure, phase diagrams, mechanical properties, failure modes, materials selection, polymers/ceramics/composites.",
+        sos: [1,6], topics: [["Crystal structure & defects",4],["Phase diagrams",6],["Mechanical properties & testing",6],["Failure (fatigue, creep, fracture)",6],["Materials selection methodology",4],["Polymers, ceramics, composites",6],["Heat treatment",4]], textbook: "Materials Science & Engineering (Callister)" },
+    "MENG3350": { desc: "System modeling, Laplace transforms, transfer functions, PID control, frequency response, vibrations intro, data-driven modeling.",
+        sos: [1,2,6], topics: [["System modeling (mech/elec/fluid)",6],["Laplace transforms & TFs",6],["Block diagrams",2],["Time-domain response",4],["PID controller design",6],["Root locus & freq. response",4],["Vibrations intro",4],["Data-driven modeling",2],["Lab: controller experiments",14]], textbook: "System Dynamics (Palm) or Ogata" },
+    "MENG3360": { desc: "Design of machine elements — shafts, bearings, gears, springs, fasteners. Manufacturing processes. Generative design intro.",
+        sos: [1,2], topics: [["Design methodology & safety factors",4],["Fatigue analysis",6],["Shafts & bearings",6],["Gears",4],["Springs & fasteners",4],["Manufacturing processes",4],["Generative design / topology opt.",4],["DFM",4]], textbook: "Shigley's Mechanical Engineering Design" },
+    "MENG3370": { desc: "Fluid properties, statics, Bernoulli equation, conservation laws, dimensional analysis, pipe flow, external flow.",
+        sos: [1,6], topics: [["Fluid properties",2],["Fluid statics",4],["Bernoulli equation",4],["Conservation laws",6],["Dimensional analysis",4],["Pipe flow & losses",6],["External flow & drag",4],["Compressible flow intro",4],["Lab experiments",14]], textbook: "Fluid Mechanics (Cengel & Cimbala)" },
+    "MENG3380": { desc: "Steady/transient conduction, fins, forced/natural convection, radiation, heat exchangers.",
+        sos: [1,6], topics: [["Steady conduction",6],["Transient conduction",4],["Fins (extended surfaces)",4],["Forced convection",6],["Natural convection",4],["Radiation",6],["Heat exchangers",6],["Lab experiments",14]], textbook: "Heat Transfer (Cengel)" },
+    "MENG3390": { desc: "Product development process, additive manufacturing, reverse engineering, rapid prototyping.",
+        sos: [2,5], topics: [["Product development process",2],["Additive manufacturing",4],["Reverse engineering",4],["Rapid prototyping project",4]], textbook: "Project-based" },
+    "MENG4440": { desc: "Composite materials: micromechanics, laminate theory, failure criteria, manufacturing, testing, design applications.",
+        sos: [1,7], topics: [["Fiber & matrix materials",4],["Micromechanics",6],["Laminate theory (CLT)",8],["Failure criteria",6],["Manufacturing methods",4],["Testing & characterization",4],["Design applications",4]], textbook: "Mechanics of Composite Materials (Jones)" },
+    "MENG4450": { desc: "CFD: governing equations, discretization, grid generation, turbulence models, PINNs, ML surrogates, commercial software.",
+        sos: [1,7], topics: [["Governing equations",4],["Discretization (FDM, FVM)",6],["Grid generation",4],["Solution algorithms",4],["Turbulence modeling (RANS, LES)",4],["Physics-informed neural networks",4],["ML surrogate models",2],["Commercial CFD projects",8]], textbook: "Computational Fluid Mechanics (Anderson or Versteeg)" },
+    "MENG4460": { desc: "Hands-on lab with solar, wind, and fuel cell energy systems. Data acquisition and efficiency analysis.",
+        sos: [6], topics: [["Solar energy systems",4],["Wind energy systems",4],["Fuel cells",4],["Data acquisition & analysis",2]], textbook: "Lab manual" },
+    "MENG4490": { desc: "CNC, advanced additive mfg, automation, Industry 4.0, AI-driven optimization, computer vision QC, smart manufacturing.",
+        sos: [1,2,7], topics: [["CNC machining",4],["Advanced additive manufacturing",6],["Automation & robotics",4],["Industry 4.0 / IoT",4],["AI-driven process optimization",4],["Computer vision for QC",4],["Smart manufacturing / digital twins",6],["Sustainable manufacturing",4]], textbook: "Fundamentals of Modern Manufacturing (Groover)" },
+    "MENG4980": { desc: "Capstone Design I: Project planning, concept generation/selection, preliminary analysis, team-based open-ended design.",
+        sos: [1,2,3,4,5,6,7], topics: [["Project planning & requirements",4],["Concept generation & selection",4],["Preliminary analysis",6],["Prototyping planning",4],["Ethics review",2],["Progress presentations",4]], textbook: "Team project" },
+    "MENG4990": { desc: "Capstone Design II: Detailed analysis, fabrication, testing, validation, documentation, final presentation.",
+        sos: [1,2,3,4,5,6,7], topics: [["Detailed engineering analysis",6],["Fabrication & prototyping",8],["Testing & validation",6],["Technical documentation",4],["Final presentation",4],["AI tool documentation",2]], textbook: "Team project" },
+    "ENGR2022": { desc: "Time value of money, economic analysis, depreciation, project management, risk analysis, decision making.",
+        sos: [2,4], topics: [["Time value of money",6],["Economic analysis (PW, AW, IRR)",8],["Depreciation & taxes",4],["Project management fundamentals",6],["Risk analysis & decision making",6],["Case studies",6]], textbook: "Engineering Economy (Blank & Tarquin)" },
+    "ENGR4400": { desc: "Comprehensive review for FE exam: math, statics, dynamics, thermo, fluids, heat transfer, materials, circuits, ethics.",
+        sos: [1], topics: [["Math review",2],["Statics & dynamics",2],["Thermodynamics & fluids",2],["Materials & mechanics",2],["Circuits & controls",2],["Ethics & economics",2],["Practice exams",2]], textbook: "FE Review Manual (Lindeburg)" },
+    "PHIL2259": { desc: "Engineering ethics: classical cases, codes of ethics, AI ethics, algorithmic bias, autonomous systems, data privacy, responsible AI.",
+        sos: [4], topics: [["Ethical theories & frameworks",4],["Engineering codes (NSPE, ASME)",4],["Classical cases (Challenger, Bhopal)",4],["Whistleblowing & responsibility",4],["AI decision-making liability",4],["Algorithmic bias in engineering",4],["Autonomous systems ethics",4],["Data privacy, IP, responsible AI",4],["Environmental justice",4]], textbook: "Ethics in Engineering (Martin & Schinzinger)" },
+};
+
+function updateDetail(course, schoolKey) {
+    const detail = document.getElementById('course-detail');
+    if (!course) {
+        detail.innerHTML = '<p style="color:#656d76; font-size:14px; text-align:center;">Click any course box above to see its full name, syllabus, prerequisites, co-requisites, and ABET mapping.</p>';
+        detail.classList.remove('has-content');
+        d3.selectAll('.node').classed('highlighted', false).classed('dimmed', false);
+        d3.selectAll('.link').classed('highlighted', false).classed('dimmed', false);
+        return;
+    }
+
+    const syl = syllabusDB[course.id];
+    const school = schools[schoolKey];
+    const abetCatMap = {
+        math: "Math & Basic Science", physics: "Math & Basic Science", chemistry: "Math & Basic Science",
+        engr_core: "Engineering Topics", me_core: "ME Program Criteria", me_advanced: "ME Depth & Breadth",
+        electrical: "Engineering Breadth", capstone: "Major Design Experience", gen_ed: "General Education",
+    };
+
+    let html = `<h2 style="margin-bottom:2px;">${course.label}</h2>`;
+    html += `<div class="course-title" style="font-size:15px; margin-bottom:8px;">${course.name}</div>`;
+    html += `<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">`;
+    html += `<span style="background:#ddf4ff; color:#0550ae; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;">${course.credits} credits</span>`;
+    html += `<span style="background:${CATEGORIES[course.cat]?.color}20; color:${CATEGORIES[course.cat]?.color}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; border:1px solid ${CATEGORIES[course.cat]?.color}40;">${CATEGORIES[course.cat]?.label}</span>`;
+    html += `<span style="background:#f6f8fa; color:#656d76; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;">Year ${Math.ceil(course.sem / 2)} ${course.sem % 2 === 1 ? 'Fall' : 'Spring'}</span>`;
+    html += `</div>`;
+
+    // Description
+    if (syl) {
+        html += `<div class="detail-label">Description</div><div class="detail-value" style="font-size:13px; color:#1f2328; margin-bottom:8px;">${syl.desc}</div>`;
+    }
+
+    // Two-column layout
+    html += `<div style="display:flex; gap:24px; flex-wrap:wrap;">`;
+    html += `<div style="flex:1; min-width:280px;">`;
+
+    // ABET Outcomes
+    if (syl && syl.sos) {
+        const soNames = {1:"Complex Problem Solving", 2:"Engineering Design", 3:"Communication", 4:"Ethics & Responsibility", 5:"Teamwork", 6:"Experimentation & Data", 7:"Self-Directed Learning"};
+        html += `<div class="detail-label">ABET Student Outcomes</div><div class="detail-value">`;
+        syl.sos.forEach(so => {
+            html += `<div style="font-size:11px; margin:2px 0;"><span style="background:#dafbe1; color:#116329; padding:1px 6px; border-radius:8px; font-weight:700; font-size:10px;">SO ${so}</span> ${soNames[so]}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    // ABET Category
+    if (abetCatMap[course.cat]) {
+        html += `<div class="detail-label">ABET Category</div><div class="detail-value" style="font-size:12px;">${abetCatMap[course.cat]}</div>`;
+    }
+
+    // Prerequisites
+    if (course.prereqs.length > 0) {
+        html += `<div class="detail-label">Prerequisites</div><div class="detail-value">`;
+        course.prereqs.forEach(p => {
+            const pc = school.courses.find(c => c.id === p);
+            if (pc) html += `<div style="font-size:12px; margin:1px 0; cursor:pointer; color:#0969da;" onclick="clickCourseById('${p}','${schoolKey}')">&rarr; ${pc.label} (${pc.name})</div>`;
+            else html += `<div style="font-size:12px;">&rarr; ${p}</div>`;
+        });
+        html += `</div>`;
+    }
+    if (course.coreqs.length > 0) {
+        html += `<div class="detail-label">Co-requisites</div><div class="detail-value">`;
+        course.coreqs.forEach(p => {
+            const pc = school.courses.find(c => c.id === p);
+            if (pc) html += `<div style="font-size:12px; margin:1px 0; cursor:pointer; color:#d4a017;" onclick="clickCourseById('${p}','${schoolKey}')">&harr; ${pc.label} (${pc.name})</div>`;
+            else html += `<div style="font-size:12px;">&harr; ${p}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    // After-requisites (courses that depend on this one)
+    const afterReqs = school.courses.filter(c => c.prereqs.includes(course.id) || c.coreqs.includes(course.id));
+    if (afterReqs.length > 0) {
+        html += `<div class="detail-label">After-Requisites (courses that need this)</div><div class="detail-value">`;
+        afterReqs.forEach(c => {
+            html += `<div style="font-size:12px; margin:1px 0; cursor:pointer; color:#1a7f37;" onclick="clickCourseById('${c.id}','${schoolKey}')">&darr; ${c.label} (${c.name})</div>`;
+        });
+        html += `</div>`;
+    }
+
+    html += `</div>`; // end left column
+
+    // RIGHT COLUMN: Syllabus
+    html += `<div style="flex:1; min-width:300px;">`;
+
+    // Topic Breakdown (Syllabus)
+    if (syl && syl.topics) {
+        html += `<div class="detail-label">Syllabus / Topic Breakdown</div>`;
+        html += `<table style="width:100%; font-size:12px; border-collapse:collapse; margin:4px 0;">`;
+        html += `<thead><tr><th style="text-align:left; padding:4px 6px; border-bottom:2px solid #d1d9e0; font-size:11px; color:#656d76;">Topic</th><th style="text-align:right; padding:4px 6px; border-bottom:2px solid #d1d9e0; font-size:11px; color:#656d76;">Hours</th></tr></thead>`;
+        let totalHrs = 0;
+        syl.topics.forEach(([topic, hrs]) => {
+            totalHrs += hrs;
+            html += `<tr><td style="padding:4px 6px; border-bottom:1px solid #eef1f5;">${topic}</td><td style="padding:4px 6px; border-bottom:1px solid #eef1f5; text-align:right; color:#656d76;">${hrs}</td></tr>`;
+        });
+        html += `<tr style="font-weight:700; background:#f6f8fa;"><td style="padding:4px 6px;">Total</td><td style="padding:4px 6px; text-align:right;">${totalHrs} hrs</td></tr>`;
+        html += `</table>`;
+    }
+
+    // Textbook
+    if (syl && syl.textbook) {
+        html += `<div class="detail-label">Suggested Textbook</div><div class="detail-value" style="font-size:12px; font-style:italic; color:#656d76;">${syl.textbook}</div>`;
+    }
+
+    // Equivalents
+    if (schoolKey === 'umsl' && equivalentMap[course.id]) {
+        html += `<div class="detail-label">Equivalents at Other Schools</div><div class="detail-value">`;
+        const eq = equivalentMap[course.id];
+        if (eq.mst) {
+            const mc = schools.mst.courses.find(c => c.id === eq.mst);
+            html += `<span class="equiv-chip equiv-sandt">S&T: ${mc ? mc.label : eq.mst}</span> `;
+        }
+        if (eq.siue) {
+            const sc = schools.siue.courses.find(c => c.id === eq.siue);
+            html += `<span class="equiv-chip equiv-siue">SIUE: ${sc ? sc.label : eq.siue}</span> `;
+        }
+        if (eq.slu) {
+            const lc = schools.slu.courses.find(c => c.id === eq.slu);
+            html += `<span class="equiv-chip equiv-slu">SLU: ${lc ? lc.label : eq.slu}</span> `;
+        }
+        html += `</div>`;
+    }
+
+    html += `</div>`; // end right column
+    html += `</div>`; // end columns wrapper
+
+    // Link to full syllabus page
+    html += `<div style="margin-top:8px; padding-top:6px; border-top:1px solid #d1d9e0; text-align:center;">`;
+    html += `<a href="syllabi.html#year${Math.ceil(course.sem/2)}" style="font-size:12px; color:#0969da; text-decoration:none;">&rarr; View full syllabus page</a>`;
+    html += `</div>`;
+
+    detail.innerHTML = html;
+    detail.classList.add('has-content');
+}
+
+// Click a course by ID from the detail panel
+function clickCourseById(courseId, schoolKey) {
+    const school = schools[schoolKey];
+    const course = school.courses.find(c => c.id === courseId);
+    if (course) {
+        selectedCourse = course;
+        const allCourses = school.courses.filter(c => activeCategories.has(c.cat));
+        const links = [];
+        allCourses.forEach(c => {
+            c.prereqs.forEach(p => { if (allCourses.find(x=>x.id===p)) links.push({source:p,target:c.id,type:'prerequisite'}); });
+            c.coreqs.forEach(p => { if (allCourses.find(x=>x.id===p)) links.push({source:p,target:c.id,type:'corequisite'}); });
+        });
+        highlightPath(course, allCourses, links);
+        updateDetail(course, schoolKey);
+    }
+}
+
+function fitToScreen() {
+    const bounds = g.node().getBBox();
+    const svgEl = document.getElementById('graph');
+    const w = svgEl.clientWidth;
+    const h = svgEl.clientHeight;
+    const scale = Math.min(w / (bounds.width + 100), h / (bounds.height + 100)) * 0.9;
+    const tx = (w - bounds.width * scale) / 2 - bounds.x * scale;
+    const ty = (h - bounds.height * scale) / 2 - bounds.y * scale;
+    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+}
+
+init();
+</script>
+</body>
+</html>

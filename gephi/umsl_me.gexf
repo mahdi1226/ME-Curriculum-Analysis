@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://gexf.net/1.3" version="1.3">
+  <meta lastmodifieddate="2026-04-07">
+    <creator>UMSL ME Program Analysis</creator>
+    <description>UMSL Mechanical Engineering prerequisite graph</description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="name" type="string"/>
+      <attribute id="1" title="credits" type="integer"/>
+      <attribute id="2" title="category" type="string"/>
+      <attribute id="3" title="semester" type="integer"/>
+      <attribute id="4" title="year" type="integer"/>
+      <attribute id="5" title="season" type="string"/>
+    </attributes>
+    <attributes class="edge" mode="static">
+      <attribute id="0" title="type" type="string"/>
+    </attributes>
+    <nodes>
+      <!-- Year 1 Fall -->
+      <node id="ENGL1100" label="ENGL 1100">
+        <attvalues><attvalue for="0" value="First-Year Writing"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGR1414" label="ENGR 1414">
+        <attvalues><attvalue for="0" value="Elementary Engineering Design"/><attvalue for="1" value="2"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MATH1800" label="MATH 1800">
+        <attvalues><attvalue for="0" value="Calculus I"/><attvalue for="1" value="5"/><attvalue for="2" value="math"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="CHEM_ENG" label="CHEM">
+        <attvalues><attvalue for="0" value="General Chemistry for Engineering"/><attvalue for="1" value="4"/><attvalue for="2" value="chemistry"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="INTDSC1003" label="INTDSC 1003">
+        <attvalues><attvalue for="0" value="First Year Experience"/><attvalue for="1" value="1"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 1 Spring -->
+      <node id="MATH1900" label="MATH 1900">
+        <attvalues><attvalue for="0" value="Calculus II"/><attvalue for="1" value="5"/><attvalue for="2" value="math"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG1204" label="MENG 1204">
+        <attvalues><attvalue for="0" value="ME 3D Design (CAD)"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="PHYS2111" label="PHYS 2111/L">
+        <attvalues><attvalue for="0" value="Physics I: Mechanics and Heat"/><attvalue for="1" value="5"/><attvalue for="2" value="physics"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_HIST" label="Core Hist/Gov">
+        <attvalues><attvalue for="0" value="American History and Government"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 2 Fall -->
+      <node id="EENG2310" label="EENG 2310">
+        <attvalues><attvalue for="0" value="Circuit Analysis I"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGR2310" label="ENGR 2310">
+        <attvalues><attvalue for="0" value="Statics"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MATH2000" label="MATH 2000">
+        <attvalues><attvalue for="0" value="Calculus III"/><attvalue for="1" value="5"/><attvalue for="2" value="math"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="PHYS2112" label="PHYS 2112/L">
+        <attvalues><attvalue for="0" value="Physics II: E&amp;M, Optics"/><attvalue for="1" value="5"/><attvalue for="2" value="physics"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MATH1320" label="MATH 1320">
+        <attvalues><attvalue for="0" value="Intro to Probability and Statistics"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 2 Spring -->
+      <node id="ENGR2320" label="ENGR 2320">
+        <attvalues><attvalue for="0" value="Dynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="ENGR2332" label="ENGR 2332">
+        <attvalues><attvalue for="0" value="Mechanics of Materials"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="ENGR2330" label="ENGR 2330">
+        <attvalues><attvalue for="0" value="Intro to Thermodynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="CMPSCI1250" label="CMP SCI 1250">
+        <attvalues><attvalue for="0" value="Intro to Computing"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MATH2020" label="MATH 2020">
+        <attvalues><attvalue for="0" value="Differential Equations"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 3 Fall -->
+      <node id="MENG3370" label="MENG 3370/L">
+        <attvalues><attvalue for="0" value="Fluid Mechanics + Lab"/><attvalue for="1" value="4"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MENG3330" label="MENG 3330">
+        <attvalues><attvalue for="0" value="Instrumentation and Measurement"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGR3300" label="ENGR 3300">
+        <attvalues><attvalue for="0" value="Applied Thermodynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGL3130" label="ENGL 3130">
+        <attvalues><attvalue for="0" value="Technical Writing"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="PHIL2259" label="PHIL 2259">
+        <attvalues><attvalue for="0" value="Engineering Ethics"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 3 Spring -->
+      <node id="MENG3340" label="MENG 3340">
+        <attvalues><attvalue for="0" value="Properties of Material and Testing"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG3350" label="MENG 3350/L">
+        <attvalues><attvalue for="0" value="System Dynamics and Control + Lab"/><attvalue for="1" value="4"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG3360" label="MENG 3360">
+        <attvalues><attvalue for="0" value="Machine Design and Manufacturing"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG3380" label="MENG 3380/L">
+        <attvalues><attvalue for="0" value="Heat Transfer + Lab"/><attvalue for="1" value="4"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG3390" label="MENG 3390">
+        <attvalues><attvalue for="0" value="Product Dev. and Prototyping Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_SS1" label="Explore SS">
+        <attvalues><attvalue for="0" value="Social Sciences (Global)"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <!-- Year 4 Fall -->
+      <node id="MENG4440" label="MENG 4440">
+        <attvalues><attvalue for="0" value="Intro to Composite Materials"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="MENG4980" label="MENG 4980">
+        <attvalues><attvalue for="0" value="Senior Design I (Capstone)"/><attvalue for="1" value="2"/><attvalue for="2" value="capstone"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGR4400" label="ENGR 4400">
+        <attvalues><attvalue for="0" value="FE Exam Review"/><attvalue for="1" value="1"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="ENGR2022" label="ENGR 2022">
+        <attvalues><attvalue for="0" value="Engineering Economics and PM"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="GE_HFA1" label="Explore HFA">
+        <attvalues><attvalue for="0" value="Humanities and Fine Arts"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <node id="GE_COMM" label="Core Comm">
+        <attvalues><attvalue for="0" value="Communication Proficiency"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues>
+      </node>
+      <!-- Year 4 Spring -->
+      <node id="MENG4990" label="MENG 4990">
+        <attvalues><attvalue for="0" value="Senior Design II (Capstone)"/><attvalue for="1" value="2"/><attvalue for="2" value="capstone"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG4490" label="MENG 4490">
+        <attvalues><attvalue for="0" value="Advanced Manufacturing"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG4450" label="MENG 4450">
+        <attvalues><attvalue for="0" value="Computational Fluid Dynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="MENG4460" label="MENG 4460">
+        <attvalues><attvalue for="0" value="Renewable Energy Systems Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="me_advanced"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_SS2" label="Explore SS">
+        <attvalues><attvalue for="0" value="Social Sciences"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+      <node id="GE_HFA2" label="Explore HFA">
+        <attvalues><attvalue for="0" value="Humanities and Fine Arts"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <!-- Math chain -->
+      <edge id="e1" source="MATH1800" target="MATH1900" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e2" source="MATH1900" target="MATH2000" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e3" source="MATH2000" target="MATH2020" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Physics chain -->
+      <edge id="e4" source="MATH1800" target="PHYS2111" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e5" source="PHYS2111" target="PHYS2112" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e6" source="MATH1900" target="PHYS2112" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Statics -->
+      <edge id="e7" source="MATH1900" target="ENGR2310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e8" source="PHYS2111" target="ENGR2310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Dynamics -->
+      <edge id="e9" source="ENGR2310" target="ENGR2320" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e10" source="MATH2000" target="ENGR2320" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Mechanics of Materials -->
+      <edge id="e11" source="ENGR2310" target="ENGR2332" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Thermodynamics -->
+      <edge id="e12" source="MATH1900" target="ENGR2330" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e13" source="PHYS2112" target="ENGR2330" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Circuits -->
+      <edge id="e14" source="PHYS2112" target="EENG2310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e15" source="MATH2000" target="EENG2310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Fluid Mechanics -->
+      <edge id="e16" source="MATH2020" target="MENG3370" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e17" source="ENGR2320" target="MENG3370" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e18" source="ENGR2330" target="MENG3370" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Instrumentation -->
+      <edge id="e19" source="EENG2310" target="MENG3330" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Applied Thermo -->
+      <edge id="e20" source="ENGR2330" target="ENGR3300" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Technical Writing -->
+      <edge id="e21" source="ENGL1100" target="ENGL3130" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Materials -->
+      <edge id="e22" source="ENGR2332" target="MENG3340" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- System Dynamics -->
+      <edge id="e23" source="MATH2020" target="MENG3350" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e24" source="ENGR2320" target="MENG3350" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e25" source="CMPSCI1250" target="MENG3350" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Machine Design -->
+      <edge id="e26" source="ENGR2332" target="MENG3360" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e27" source="MENG3340" target="MENG3360" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <!-- Heat Transfer -->
+      <edge id="e28" source="MATH2020" target="MENG3380" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e29" source="MENG3370" target="MENG3380" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Prototyping -->
+      <edge id="e30" source="ENGR2332" target="MENG3390" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Composites -->
+      <edge id="e31" source="MENG3340" target="MENG4440" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Capstone I -->
+      <edge id="e32" source="MENG3360" target="MENG4980" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e33" source="MENG3380" target="MENG4980" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Capstone II -->
+      <edge id="e34" source="MENG4980" target="MENG4990" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- CFD -->
+      <edge id="e35" source="MENG3370" target="MENG4450" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e36" source="MENG3380" target="MENG4450" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Adv Manufacturing -->
+      <edge id="e37" source="MENG3390" target="MENG4490" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <!-- Renewable Energy -->
+      <edge id="e38" source="MENG3370" target="MENG4460" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+    </edges>
+  </graph>
+</gexf>
