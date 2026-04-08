@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ME Program Course Graph - UMSL Benchmarking</title>
+    <link rel="stylesheet" href="nav.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="nav.js"></script>
     <style>
@@ -23,14 +24,14 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 8px 16px;
-            background: #f6f8fa;
-            border-bottom: 1px solid #d1d9e0;
+            padding: 8px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
             flex-wrap: wrap;
             min-height: 44px;
         }
         #toolbar h3 {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             color: #656d76;
             letter-spacing: 0.5px;
@@ -78,16 +79,18 @@
             flex-shrink: 0;
         }
         #course-detail {
-            padding: 20px 24px;
-            background: #ffffff;
-            border-top: 2px solid #d1d9e0;
+            padding: 24px 32px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
             overflow-y: auto;
             max-height: 45vh;
             min-height: 0;
             transition: min-height 0.3s;
         }
         #course-detail.has-content {
-            min-height: 180px;
+            min-height: 200px;
+            background: #ffffff;
+            border-top: 2px solid #0969da;
         }
         #course-detail h2 {
             font-size: 20px;
@@ -102,14 +105,15 @@
         .detail-label {
             font-size: 11px;
             text-transform: uppercase;
-            color: #8b949e;
+            color: #656d76;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 12px;
             margin-bottom: 4px;
+            font-weight: 600;
         }
         .detail-value {
             font-size: 13px;
-            color: #e1e4e8;
+            color: #1f2328;
         }
         .equiv-chip {
             display: inline-block;
@@ -189,15 +193,17 @@
             gap: 8px;
         }
         .ctrl-btn {
-            padding: 6px 12px;
-            background: #21262d;
-            border: 1px solid #30363d;
+            padding: 5px 12px;
+            background: #ffffff;
+            border: 1px solid #d1d9e0;
             border-radius: 6px;
-            color: #c9d1d9;
+            color: #24292f;
             cursor: pointer;
             font-size: 12px;
+            font-weight: 500;
+            transition: all 0.15s;
         }
-        .ctrl-btn:hover { border-color: #58a6ff; }
+        .ctrl-btn:hover { border-color: #0969da; color: #0969da; background: #f6f8fa; }
 
         /* Light theme */
         body.light { background: #ffffff; color: #1f2328; }
@@ -210,7 +216,7 @@
         body.light .filter-chip { background: #eef1f5; border-color: #d1d9e0; color: #656d76; }
         body.light .filter-chip.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
         body.light #search-input { background: #ffffff; border-color: #d1d9e0; color: #1f2328; }
-        body.light .ctrl-btn { background: #eef1f5; border-color: #d1d9e0; color: #1f2328; }
+        body.light .ctrl-btn { background: #ffffff; border-color: #d1d9e0; color: #24292f; }
         body.light .legend-item { color: #1f2328; }
         body.light #course-detail h2 { color: #0969da; }
         body.light .detail-value { color: #1f2328; }
@@ -239,11 +245,11 @@
         .filter-chip.active { background: #ddf4ff; border-color: #0969da; color: #0969da; }
         .stats-bar {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             font-size: 12px;
-            color: #8b949e;
+            color: #656d76;
         }
-        .stats-bar span { color: #58a6ff; font-weight: 600; }
+        .stats-bar span { color: #0969da; font-weight: 600; }
         #search-input {
             padding: 5px 10px;
             background: #ffffff;
@@ -261,33 +267,36 @@
 <body class="light">
 <script>createNav('graph');</script>
 <div id="app">
-    <!-- Top toolbar -->
-    <div id="toolbar">
-        <h3>School:</h3>
-        <div class="school-tabs" id="school-tabs">
-            <div class="school-tab active" data-school="umsl">UMSL</div>
-            <div class="school-tab" data-school="mst">Missouri S&T</div>
-            <div class="school-tab" data-school="siue">SIUE</div>
-            <div class="school-tab" data-school="slu">SLU</div>
+    <!-- Toolbar row 1: School selector + stats + controls -->
+    <div id="toolbar" style="justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <h3>School:</h3>
+            <div class="school-tabs" id="school-tabs">
+                <div class="school-tab active" data-school="umsl">UMSL</div>
+                <div class="school-tab" data-school="mst">Missouri S&T</div>
+                <div class="school-tab" data-school="siue">SIUE</div>
+                <div class="school-tab" data-school="slu">SLU</div>
+            </div>
+            <div class="stats-bar" id="stats-bar" style="margin-left:8px;"></div>
         </div>
-        <span style="color:#d1d9e0;">|</span>
-        <h3>Filter:</h3>
-        <div class="filter-chip" id="btn-toggle-filters" style="font-weight:700; cursor:pointer;">All</div>
-        <div class="filter-chips" id="filter-chips"></div>
-        <span style="color:#d1d9e0;">|</span>
-        <input type="text" id="search-input" placeholder="Search..." style="width:120px;">
-        <div class="stats-bar" id="stats-bar"></div>
-    </div>
-    <!-- Graph area -->
-    <div id="graph-container">
-        <svg id="graph"></svg>
-        <div class="controls">
+        <div style="display:flex; align-items:center; gap:6px;">
+            <input type="text" id="search-input" placeholder="Search courses..." style="width:150px;">
             <button class="ctrl-btn" id="btn-theme">Dark Mode</button>
             <button class="ctrl-btn" id="btn-zoom-in">+</button>
             <button class="ctrl-btn" id="btn-zoom-out">-</button>
             <button class="ctrl-btn" id="btn-fit">Fit</button>
             <button class="ctrl-btn" id="btn-reset">Reset</button>
         </div>
+    </div>
+    <!-- Toolbar row 2: Filters -->
+    <div id="toolbar-filters" style="display:flex; align-items:center; gap:6px; padding:4px 16px 6px; background:#f6f8fa; border-bottom:1px solid #d1d9e0; flex-wrap:wrap;">
+        <h3 style="font-size:11px; text-transform:uppercase; color:#656d76; letter-spacing:0.5px; margin:0;">Filter:</h3>
+        <div class="filter-chip" id="btn-toggle-filters" style="font-weight:700; cursor:pointer;">All</div>
+        <div class="filter-chips" id="filter-chips"></div>
+    </div>
+    <!-- Graph area -->
+    <div id="graph-container">
+        <svg id="graph"></svg>
     </div>
     <!-- Course detail panel (below graph) -->
     <div id="course-detail">
@@ -631,8 +640,11 @@ function setupSidebar() {
     });
 
     // Toggle All / None filters
+    // Start: all filters are ON, so button shows "None" (meaning "click to show none")
     let allFiltersOn = true;
-    document.getElementById('btn-toggle-filters').addEventListener('click', () => {
+    const toggleBtn = document.getElementById('btn-toggle-filters');
+    toggleBtn.textContent = 'None';
+    toggleBtn.addEventListener('click', () => {
         allFiltersOn = !allFiltersOn;
         document.querySelectorAll('.filter-chip[data-cat]').forEach(chip => {
             if (allFiltersOn) {
@@ -643,7 +655,8 @@ function setupSidebar() {
                 activeCategories.delete(chip.dataset.cat);
             }
         });
-        document.getElementById('btn-toggle-filters').textContent = allFiltersOn ? 'All' : 'None';
+        // When all are on, show "None" (click to clear). When off, show "All" (click to restore).
+        toggleBtn.textContent = allFiltersOn ? 'None' : 'All';
         renderSchool(currentSchool);
     });
 
