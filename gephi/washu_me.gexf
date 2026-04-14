@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://gexf.net/1.3" version="1.3">
+  <meta lastmodifieddate="2026-04-08">
+    <creator>UMSL ME Program Analysis</creator>
+    <description>Washington University in St. Louis (McKelvey) Mechanical Engineering prerequisite graph</description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="name" type="string"/>
+      <attribute id="1" title="credits" type="integer"/>
+      <attribute id="2" title="category" type="string"/>
+      <attribute id="3" title="semester" type="integer"/>
+      <attribute id="4" title="year" type="integer"/>
+      <attribute id="5" title="season" type="string"/>
+    </attributes>
+    <attributes class="edge" mode="static">
+      <attribute id="0" title="type" type="string"/>
+    </attributes>
+    <nodes>
+      <!-- Year 1 Fall -->
+      <node id="MEMS1000" label="MEMS 1000"><attvalues><attvalue for="0" value="Intro to ME and Mech Design"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MATH1520" label="MATH 1520"><attvalues><attvalue for="0" value="Calculus II"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="CHEM1601" label="CHEM 1601"><attvalues><attvalue for="0" value="Principles of General Chemistry I"/><attvalue for="1" value="3"/><attvalue for="2" value="chemistry"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="CHEM1751" label="CHEM 1751"><attvalues><attvalue for="0" value="General Chemistry Lab I"/><attvalue for="1" value="2"/><attvalue for="2" value="chemistry"/><attvalue for="3" value="1"/><attvalue for="4" value="1"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <!-- Year 1 Spring -->
+      <node id="MEMS1100" label="MEMS 1100"><attvalues><attvalue for="0" value="Machine Shop Practicum"/><attvalue for="1" value="1"/><attvalue for="2" value="me_core"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS1150" label="MEMS 1150"><attvalues><attvalue for="0" value="Computer-Aided Design"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MATH2130" label="MATH 2130"><attvalues><attvalue for="0" value="Calculus III"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="PHYS1740" label="PHYSICS 1740"><attvalues><attvalue for="0" value="Physics I"/><attvalue for="1" value="3"/><attvalue for="2" value="physics"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="PHYS1741" label="PHYSICS 1741"><attvalues><attvalue for="0" value="Physics I Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="physics"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="COMPUTING" label="ENGR 1201"><attvalues><attvalue for="0" value="Intro to Engineering Computing"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="2"/><attvalue for="4" value="1"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <!-- Year 2 Fall -->
+      <node id="MEMS2510" label="MEMS 2510"><attvalues><attvalue for="0" value="Statics and Mechanics of Materials"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MATH2500" label="MATH 2500"><attvalues><attvalue for="0" value="Differential Equations"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="PHYS1742" label="PHYSICS 1742"><attvalues><attvalue for="0" value="Physics II"/><attvalue for="1" value="3"/><attvalue for="2" value="physics"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="PHYS1743" label="PHYSICS 1743"><attvalues><attvalue for="0" value="Physics II Lab"/><attvalue for="1" value="1"/><attvalue for="2" value="physics"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MEMS2610" label="MEMS 2610"><attvalues><attvalue for="0" value="Materials Science"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="3"/><attvalue for="4" value="2"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <!-- Year 2 Spring -->
+      <node id="MEMS2520" label="MEMS 2520"><attvalues><attvalue for="0" value="Dynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="engr_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS2050" label="MEMS 2050"><attvalues><attvalue for="0" value="Mechanics and Materials Sci Lab"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS2000" label="MEMS 2000"><attvalues><attvalue for="0" value="Intro to E&amp;E Circuits for ME"/><attvalue for="1" value="3"/><attvalue for="2" value="electrical"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS3400" label="MEMS 3400"><attvalues><attvalue for="0" value="Thermodynamics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS2210" label="MEMS 2210"><attvalues><attvalue for="0" value="Numerical Methods and Matrix Algebra"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="4"/><attvalue for="4" value="2"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <!-- Year 3 Fall -->
+      <node id="MEMS3410" label="MEMS 3410"><attvalues><attvalue for="0" value="Fluid Mechanics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MEMS3530" label="MEMS 3530"><attvalues><attvalue for="0" value="Solid Mechanics"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="ENGR3190" label="ENGR 3190"><attvalues><attvalue for="0" value="Engineering Mathematics B"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="ENGR3280" label="ENGR 3280"><attvalues><attvalue for="0" value="Engineering Statistics with Probability"/><attvalue for="1" value="3"/><attvalue for="2" value="math"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="ENGR3100" label="ENGR 3100"><attvalues><attvalue for="0" value="Technical Writing"/><attvalue for="1" value="3"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="5"/><attvalue for="4" value="3"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <!-- Year 3 Spring -->
+      <node id="MEMS3420" label="MEMS 3420"><attvalues><attvalue for="0" value="Heat Transfer"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS3050" label="MEMS 3050"><attvalues><attvalue for="0" value="Fluid Mech and Heat Transfer Lab"/><attvalue for="1" value="2"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS3110" label="MEMS 3110"><attvalues><attvalue for="0" value="Machine Elements"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="MEMS4310" label="MEMS 4310"><attvalues><attvalue for="0" value="Vibrations"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="6"/><attvalue for="4" value="3"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <!-- Year 4 Fall -->
+      <node id="MEMS3430" label="MEMS 3430"><attvalues><attvalue for="0" value="Design of Thermal Systems"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MEMS4320" label="MEMS 4320"><attvalues><attvalue for="0" value="Modeling, Simulation and Control"/><attvalue for="1" value="3"/><attvalue for="2" value="me_core"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="MEMS4050" label="MEMS 4050"><attvalues><attvalue for="0" value="Vibrations Laboratory"/><attvalue for="1" value="1"/><attvalue for="2" value="me_core"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <node id="ENGR4501" label="ENGR 4501"><attvalues><attvalue for="0" value="Engineering Ethics and Sustainability"/><attvalue for="1" value="1"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="7"/><attvalue for="4" value="4"/><attvalue for="5" value="Fall"/></attvalues></node>
+      <!-- Year 4 Spring -->
+      <node id="MEMS4110" label="MEMS 4110"><attvalues><attvalue for="0" value="ME Design Project (Capstone)"/><attvalue for="1" value="3"/><attvalue for="2" value="capstone"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="ENGR4502" label="ENGR 4502"><attvalues><attvalue for="0" value="Engineering Leadership and Team Building"/><attvalue for="1" value="1"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues></node>
+      <node id="ENGR4503" label="ENGR 4503"><attvalues><attvalue for="0" value="Conflict Management and Negotiation"/><attvalue for="1" value="1"/><attvalue for="2" value="gen_ed"/><attvalue for="3" value="8"/><attvalue for="4" value="4"/><attvalue for="5" value="Spring"/></attvalues></node>
+    </nodes>
+    <edges>
+      <edge id="e1" source="MATH1520" target="MATH2130" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e2" source="MATH2130" target="MATH2500" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e3" source="MATH1520" target="PHYS1740" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e4" source="PHYS1740" target="PHYS1741" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e5" source="PHYS1740" target="PHYS1742" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e6" source="MATH2130" target="PHYS1742" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e7" source="PHYS1742" target="PHYS1743" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e8" source="CHEM1601" target="CHEM1751" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e9" source="MEMS1000" target="MEMS1100" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e10" source="MEMS1000" target="MEMS1150" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e11" source="PHYS1740" target="MEMS2510" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e12" source="MATH2130" target="MEMS2510" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e13" source="CHEM1601" target="MEMS2610" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e14" source="MEMS2510" target="MEMS2520" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e15" source="MATH2500" target="MEMS2520" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e16" source="MEMS2510" target="MEMS2050" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e17" source="MEMS2610" target="MEMS2050" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e18" source="PHYS1742" target="MEMS2000" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e19" source="MATH2500" target="MEMS2000" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e20" source="PHYS1740" target="MEMS3400" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e21" source="MATH2500" target="MEMS3400" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e22" source="MATH2500" target="MEMS2210" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e23" source="COMPUTING" target="MEMS2210" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e24" source="MEMS2520" target="MEMS3410" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e25" source="MEMS3400" target="MEMS3410" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e26" source="MEMS2510" target="MEMS3530" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e27" source="MATH2500" target="MEMS3530" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e28" source="MATH2500" target="ENGR3190" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e29" source="MATH2130" target="ENGR3280" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e30" source="MEMS3410" target="MEMS3420" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e31" source="MEMS3410" target="MEMS3050" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e32" source="MEMS3420" target="MEMS3050" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e33" source="MEMS3530" target="MEMS3110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e34" source="MEMS2610" target="MEMS3110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e35" source="MEMS2520" target="MEMS4310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e36" source="MATH2500" target="MEMS4310" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e37" source="MEMS3420" target="MEMS3430" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e38" source="MEMS2520" target="MEMS4320" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e39" source="MEMS2000" target="MEMS4320" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e40" source="MEMS4310" target="MEMS4050" label="corequisite"><attvalues><attvalue for="0" value="corequisite"/></attvalues></edge>
+      <edge id="e41" source="MEMS3110" target="MEMS4110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+      <edge id="e42" source="MEMS4320" target="MEMS4110" label="prerequisite"><attvalues><attvalue for="0" value="prerequisite"/></attvalues></edge>
+    </edges>
+  </graph>
+</gexf>

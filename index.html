@@ -126,6 +126,7 @@
         .equiv-sandt { background: #1f6feb30; color: #58a6ff; border: 1px solid #1f6feb50; }
         .equiv-siue { background: #2ea04330; color: #3fb950; border: 1px solid #2ea04350; }
         .equiv-slu { background: #a371f730; color: #bc8cff; border: 1px solid #a371f750; }
+        .equiv-washu { background: #e8580530; color: #b8430a; border: 1px solid #e8580550; }
         .gap-badge {
             display: inline-block;
             padding: 3px 8px;
@@ -276,6 +277,7 @@
                 <div class="school-tab" data-school="mst">Missouri S&T</div>
                 <div class="school-tab" data-school="siue">SIUE</div>
                 <div class="school-tab" data-school="slu">SLU</div>
+                <div class="school-tab" data-school="washu">WashU</div>
             </div>
             <div class="stats-bar" id="stats-bar" style="margin-left:8px;"></div>
         </div>
@@ -577,6 +579,68 @@ const schools = {
             { id: "MATH_SCI_ELEC", label: "Math/Sci Elec", name: "Math/Science Elective", credits: 3, cat: "math", sem: 8, prereqs: [], coreqs: [] },
         ],
         equivalents: {}
+    },
+    washu: {
+        name: "WashU",
+        fullName: "Washington University in St. Louis (McKelvey)",
+        totalCredits: 120,
+        courses: [
+            // Year 1 Fall
+            { id: "W_MEMS1000", label: "MEMS 1000", name: "Intro to ME and Mech Design", credits: 2, cat: "me_core", sem: 1, prereqs: [], coreqs: [] },
+            { id: "W_MATH1520", label: "MATH 1520", name: "Calculus II", credits: 3, cat: "math", sem: 1, prereqs: [], coreqs: [] },
+            { id: "W_CHEM1601", label: "CHEM 1601", name: "Principles of General Chemistry I", credits: 3, cat: "chemistry", sem: 1, prereqs: [], coreqs: [] },
+            { id: "W_CHEM1751", label: "CHEM 1751", name: "General Chemistry Lab I", credits: 2, cat: "chemistry", sem: 1, prereqs: [], coreqs: ["W_CHEM1601"] },
+            { id: "W_HSS1", label: "HSS Elective", name: "Humanities/Social Sci Elective", credits: 3, cat: "gen_ed", sem: 1, prereqs: [], coreqs: [] },
+            // Year 1 Spring
+            { id: "W_MEMS1100", label: "MEMS 1100", name: "Machine Shop Practicum", credits: 1, cat: "me_core", sem: 2, prereqs: ["W_MEMS1000"], coreqs: [] },
+            { id: "W_MEMS1150", label: "MEMS 1150", name: "Computer-Aided Design", credits: 2, cat: "me_core", sem: 2, prereqs: ["W_MEMS1000"], coreqs: [] },
+            { id: "W_MATH2130", label: "MATH 2130", name: "Calculus III", credits: 3, cat: "math", sem: 2, prereqs: ["W_MATH1520"], coreqs: [] },
+            { id: "W_PHYS1740", label: "PHYSICS 1740", name: "Physics I", credits: 3, cat: "physics", sem: 2, prereqs: ["W_MATH1520"], coreqs: ["W_PHYS1741"] },
+            { id: "W_PHYS1741", label: "PHYSICS 1741", name: "Physics I Lab", credits: 1, cat: "physics", sem: 2, prereqs: [], coreqs: ["W_PHYS1740"] },
+            { id: "W_COMPUTING", label: "ENGR 1201 / CSE 1301", name: "Intro to Engineering Computing", credits: 3, cat: "electrical", sem: 2, prereqs: [], coreqs: [] },
+            // Year 2 Fall
+            { id: "W_MEMS2510", label: "MEMS 2510", name: "Statics & Mechanics of Materials", credits: 3, cat: "engr_core", sem: 3, prereqs: ["W_PHYS1740","W_MATH2130"], coreqs: [] },
+            { id: "W_MATH2500", label: "MATH 2500", name: "Differential Equations", credits: 3, cat: "math", sem: 3, prereqs: ["W_MATH2130"], coreqs: [] },
+            { id: "W_PHYS1742", label: "PHYSICS 1742", name: "Physics II", credits: 3, cat: "physics", sem: 3, prereqs: ["W_PHYS1740","W_MATH2130"], coreqs: ["W_PHYS1743"] },
+            { id: "W_PHYS1743", label: "PHYSICS 1743", name: "Physics II Lab", credits: 1, cat: "physics", sem: 3, prereqs: [], coreqs: ["W_PHYS1742"] },
+            { id: "W_MEMS2610", label: "MEMS 2610", name: "Materials Science", credits: 3, cat: "me_core", sem: 3, prereqs: ["W_CHEM1601"], coreqs: [] },
+            { id: "W_HSS2", label: "HSS Elective", name: "Humanities/Social Sci Elective", credits: 3, cat: "gen_ed", sem: 3, prereqs: [], coreqs: [] },
+            // Year 2 Spring
+            { id: "W_MEMS2520", label: "MEMS 2520", name: "Dynamics", credits: 3, cat: "engr_core", sem: 4, prereqs: ["W_MEMS2510","W_MATH2500"], coreqs: [] },
+            { id: "W_MEMS2050", label: "MEMS 2050", name: "Mechanics & Materials Sci Lab", credits: 2, cat: "me_core", sem: 4, prereqs: ["W_MEMS2510","W_MEMS2610"], coreqs: [] },
+            { id: "W_MEMS2000", label: "MEMS 2000", name: "Intro to E&E Circuits for ME", credits: 3, cat: "electrical", sem: 4, prereqs: ["W_PHYS1742","W_MATH2500"], coreqs: [] },
+            { id: "W_MEMS3400", label: "MEMS 3400", name: "Thermodynamics", credits: 3, cat: "me_core", sem: 4, prereqs: ["W_PHYS1740","W_MATH2500"], coreqs: [] },
+            { id: "W_MEMS2210", label: "MEMS 2210", name: "Numerical Methods & Matrix Alg", credits: 3, cat: "math", sem: 4, prereqs: ["W_MATH2500","W_COMPUTING"], coreqs: [] },
+            // Year 3 Fall
+            { id: "W_MEMS3410", label: "MEMS 3410", name: "Fluid Mechanics", credits: 3, cat: "me_core", sem: 5, prereqs: ["W_MEMS2520","W_MEMS3400"], coreqs: [] },
+            { id: "W_MEMS3530", label: "MEMS 3530", name: "Solid Mechanics", credits: 3, cat: "me_core", sem: 5, prereqs: ["W_MEMS2510","W_MATH2500"], coreqs: [] },
+            { id: "W_ENGR3190", label: "ENGR 3190", name: "Engineering Mathematics B", credits: 3, cat: "math", sem: 5, prereqs: ["W_MATH2500"], coreqs: [] },
+            { id: "W_ENGR3280", label: "ENGR 3280", name: "Eng Stats with Probability", credits: 3, cat: "math", sem: 5, prereqs: ["W_MATH2130"], coreqs: [] },
+            { id: "W_ENGR3100", label: "ENGR 3100", name: "Technical Writing", credits: 3, cat: "gen_ed", sem: 5, prereqs: [], coreqs: [] },
+            // Year 3 Spring
+            { id: "W_MEMS3420", label: "MEMS 3420", name: "Heat Transfer", credits: 3, cat: "me_core", sem: 6, prereqs: ["W_MEMS3410"], coreqs: [] },
+            { id: "W_MEMS3050", label: "MEMS 3050", name: "Fluid Mech & Heat Transfer Lab", credits: 2, cat: "me_core", sem: 6, prereqs: ["W_MEMS3410"], coreqs: ["W_MEMS3420"] },
+            { id: "W_MEMS3110", label: "MEMS 3110", name: "Machine Elements", credits: 3, cat: "me_core", sem: 6, prereqs: ["W_MEMS3530","W_MEMS2610"], coreqs: [] },
+            { id: "W_MEMS4310", label: "MEMS 4310", name: "Vibrations", credits: 3, cat: "me_core", sem: 6, prereqs: ["W_MEMS2520","W_MATH2500"], coreqs: [] },
+            { id: "W_PHYSSCI_ELEC", label: "Phys/Life Sci", name: "Physical or Life Science Elective", credits: 3, cat: "chemistry", sem: 6, prereqs: [], coreqs: [] },
+            { id: "W_HSS3", label: "HSS Elective", name: "Humanities/Social Sci Elective", credits: 3, cat: "gen_ed", sem: 6, prereqs: [], coreqs: [] },
+            // Year 4 Fall
+            { id: "W_MEMS3430", label: "MEMS 3430", name: "Design of Thermal Systems", credits: 3, cat: "me_core", sem: 7, prereqs: ["W_MEMS3420"], coreqs: [] },
+            { id: "W_MEMS4320", label: "MEMS 4320", name: "Modeling, Simulation & Control", credits: 3, cat: "me_core", sem: 7, prereqs: ["W_MEMS2520","W_MEMS2000"], coreqs: [] },
+            { id: "W_MEMS4050", label: "MEMS 4050", name: "Vibrations Laboratory", credits: 1, cat: "me_core", sem: 7, prereqs: [], coreqs: ["W_MEMS4310"] },
+            { id: "W_ENGR4501", label: "ENGR 4501", name: "Eng Ethics & Sustainability", credits: 1, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            { id: "W_MEMS_ELEC1", label: "MEMS Sr Elec", name: "MEMS Senior Elective 1", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            { id: "W_MEMS_ELEC2", label: "MEMS Sr Elec", name: "MEMS Senior Elective 2", credits: 3, cat: "me_advanced", sem: 7, prereqs: [], coreqs: [] },
+            { id: "W_HSS4", label: "HSS Elective", name: "Humanities/Social Sci Elective", credits: 3, cat: "gen_ed", sem: 7, prereqs: [], coreqs: [] },
+            // Year 4 Spring
+            { id: "W_MEMS4110", label: "MEMS 4110", name: "ME Design Project (Capstone)", credits: 3, cat: "capstone", sem: 8, prereqs: ["W_MEMS3110","W_MEMS4320"], coreqs: [] },
+            { id: "W_ENGR4502", label: "ENGR 4502", name: "Eng Leadership & Team Building", credits: 1, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "W_ENGR4503", label: "ENGR 4503", name: "Conflict Management & Negotiation", credits: 1, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "W_MEMS_ELEC3", label: "MEMS Sr Elec", name: "MEMS Senior Elective 3", credits: 3, cat: "me_advanced", sem: 8, prereqs: [], coreqs: [] },
+            { id: "W_HSS5", label: "HSS Elective", name: "Humanities/Social Sci Elective", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+            { id: "W_FREE", label: "Free Elective", name: "Free Elective", credits: 3, cat: "gen_ed", sem: 8, prereqs: [], coreqs: [] },
+        ],
+        equivalents: {}
     }
 };
 
@@ -586,26 +650,26 @@ const equivalentMap = {
     "MATH1900": { mst: "MATH1215", siue: "MATH152", slu: "MATH1520" },
     "MATH2000": { mst: "MATH2222", siue: "MATH250", slu: "MATH2530" },
     "MATH2020": { mst: "MATH3304", siue: "MATH305", slu: "MATH3550" },
-    "PHYS2111": { mst: "PHYS1135", siue: "PHYS141", slu: "PHYS1610" },
-    "PHYS2112": { mst: "PHYS2135", siue: "PHYS142", slu: "PHYS1630" },
-    "CHEM_ENG": { mst: "CHEM1305", siue: "CHEM131", slu: "CHEM1110" },
-    "ENGR2310": { mst: "CIVENG2200", siue: "CE240", slu: "MENG2100X" },
-    "ENGR2320": { mst: "ME2360", siue: "ME262", slu: "MENG2150" },
-    "ENGR2332": { mst: "CIVENG2210", siue: "CE242", slu: "MENG3105" },
-    "ENGR2330": { mst: "ME2519", siue: "ME310", slu: "MENG2310" },
-    "MENG3370": { mst: "ME3131", siue: "ME315", slu: "MENG3200" },
-    "MENG3380": { mst: "ME3525", siue: "ME410", slu: "MENG4300" },
-    "MENG3340": { mst: "METENG2110", siue: "ME370", slu: "MENG3510X" },
-    "MENG3350": { mst: "ME3411", siue: "ME356", slu: "MENG3110" },
-    "MENG3360": { mst: "ME3708", siue: "ME380", slu: "MENG3010" },
-    "MENG3330": { mst: "ME4840", siue: null, slu: "MENG2450" },
-    "ENGR3300": { mst: "ME3521", siue: "ME312", slu: null },
-    "EENG2310": { mst: "ELECENG2800", siue: "ECE210", slu: "ECE1100" },
-    "CMPSCI1250": { mst: "PROG_ELEC", siue: "CS145", slu: "CSCI1060" },
-    "MENG4980": { mst: "ME4761", siue: "ME482", slu: "MENG4024" },
-    "MENG4990": { mst: "ME4761", siue: "ME484", slu: "MENG4024" },
-    "MENG1204": { mst: "ME1761", siue: "CE204", slu: "MENG1011" },
-    "ENGR2022": { mst: "ENGMGT1210", siue: "IE345", slu: null },
+    "PHYS2111": { mst: "PHYS1135", siue: "PHYS141", slu: "PHYS1610", washu: "W_PHYS1740" },
+    "PHYS2112": { mst: "PHYS2135", siue: "PHYS142", slu: "PHYS1630", washu: "W_PHYS1742" },
+    "CHEM_ENG": { mst: "CHEM1305", siue: "CHEM131", slu: "CHEM1110", washu: "W_CHEM1601" },
+    "ENGR2310": { mst: "CIVENG2200", siue: "CE240", slu: "MENG2100X", washu: "W_MEMS2510" },
+    "ENGR2320": { mst: "ME2360", siue: "ME262", slu: "MENG2150", washu: "W_MEMS2520" },
+    "ENGR2332": { mst: "CIVENG2210", siue: "CE242", slu: "MENG3105", washu: "W_MEMS2510" },
+    "ENGR2330": { mst: "ME2519", siue: "ME310", slu: "MENG2310", washu: "W_MEMS3400" },
+    "MENG3370": { mst: "ME3131", siue: "ME315", slu: "MENG3200", washu: "W_MEMS3410" },
+    "MENG3380": { mst: "ME3525", siue: "ME410", slu: "MENG4300", washu: "W_MEMS3420" },
+    "MENG3340": { mst: "METENG2110", siue: "ME370", slu: "MENG3510X", washu: "W_MEMS2610" },
+    "MENG3350": { mst: "ME3411", siue: "ME356", slu: "MENG3110", washu: "W_MEMS4320" },
+    "MENG3360": { mst: "ME3708", siue: "ME380", slu: "MENG3010", washu: "W_MEMS3110" },
+    "MENG3330": { mst: "ME4840", siue: null, slu: "MENG2450", washu: "W_MEMS2050" },
+    "ENGR3300": { mst: "ME3521", siue: "ME312", slu: null, washu: "W_MEMS3430" },
+    "EENG2310": { mst: "ELECENG2800", siue: "ECE210", slu: "ECE1100", washu: "W_MEMS2000" },
+    "CMPSCI1250": { mst: "PROG_ELEC", siue: "CS145", slu: "CSCI1060", washu: "W_COMPUTING" },
+    "MENG4980": { mst: "ME4761", siue: "ME482", slu: "MENG4024", washu: "W_MEMS4110" },
+    "MENG4990": { mst: "ME4761", siue: "ME484", slu: "MENG4024", washu: "W_MEMS4110" },
+    "MENG1204": { mst: "ME1761", siue: "CE204", slu: "MENG1011", washu: "W_MEMS1150" },
+    "ENGR2022": { mst: "ENGMGT1210", siue: "IE345", slu: null, washu: null },
 };
 
 // ============================================================
@@ -1109,6 +1173,10 @@ function updateDetail(course, schoolKey) {
         if (eq.slu) {
             const lc = schools.slu.courses.find(c => c.id === eq.slu);
             html += `<span class="equiv-chip equiv-slu">SLU: ${lc ? lc.label : eq.slu}</span> `;
+        }
+        if (eq.washu) {
+            const wc = schools.washu.courses.find(c => c.id === eq.washu);
+            html += `<span class="equiv-chip equiv-washu">WashU: ${wc ? wc.label : eq.washu}</span> `;
         }
         html += `</div>`;
     }

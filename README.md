@@ -26,6 +26,7 @@ The `gephi/` directory contains `.gexf` files for all four schools, importable i
 - `mst_me.gexf` — Missouri S&T (44 nodes, 64 edges)
 - `siue_me.gexf` — SIUE (44 nodes, 52 edges)
 - `slu_me.gexf` — SLU (42 nodes, 34 edges)
+- `washu_me.gexf` — WashU/McKelvey (36 nodes, 42 edges)
 
 Node attributes: `name`, `credits`, `category`, `semester`, `year`, `season`
 Edge attributes: `type` (prerequisite / corequisite)
@@ -38,6 +39,7 @@ Edge attributes: `type` (prerequisite / corequisite)
 | **Missouri S&T** | Public (UM System) | 128 | 44 | 64 |
 | **SIUE** | Public (SIU System) | 129 | 44 | 52 |
 | **SLU** | Private (Jesuit) | 129 | 42 | 34 |
+| **WashU** | Private (McKelvey) | 120 | 36 | 42 |
 
 ## Key Findings
 
