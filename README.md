@@ -10,7 +10,7 @@ Open `index.html` in any browser — no server required (D3.js loaded via CDN).
 
 | Page | Description |
 |------|-------------|
-| **[Course Graph](index.html)** | Interactive prerequisite dependency graph. Click any course to see its syllabus, ABET mapping, prerequisites, and after-requisites. Switch between UMSL, Missouri S&T, SIUE, and SLU. |
+| **[Course Graph](index.html)** | Interactive prerequisite dependency graph. Click any course to see its syllabus, ABET mapping, prerequisites, and post-requisites. Switch between UMSL, Missouri S&T, SIUE, and SLU. |
 | **[ABET Audit](abet.html)** | Credit hour audit, Student Outcome mapping, gap analysis, and accreditation timeline |
 | **[AI & Ethics](ai-policy.html)** | ABET's AI policy, course-by-course AI integration plan, ethics in the AI era |
 | **[DEEP Analysis](deep-analysis.html)** | Critical path analysis based on the DEEP project (Busch-Vishniac et al., 2011), bottleneck identification, flexibility recommendations |

@@ -169,6 +169,8 @@
             opacity: 0.4;
         }
         .link.highlighted { opacity: 0.9; stroke-width: 2; }
+        .link.highlighted-upstream { opacity: 0.95; stroke: #d4380d !important; stroke-width: 2.25; }
+        .link.highlighted-downstream { opacity: 0.95; stroke: #1a7f37 !important; stroke-width: 2.25; }
         .link.dimmed { opacity: 0.05; }
         .link.corequisite {
             stroke-dasharray: 6,4;
@@ -311,6 +313,9 @@
         <span style="color:#aaa;">|</span>
         <span style="display:flex; align-items:center; gap:4px;"><span style="width:20px; height:0; border-top:1.5px solid #888;"></span> Prerequisite</span>
         <span style="display:flex; align-items:center; gap:4px;"><span style="width:20px; height:0; border-top:1.5px dashed #d4a017;"></span> Co-requisite</span>
+        <span style="color:#aaa;">|</span>
+        <span style="display:flex; align-items:center; gap:4px;"><span style="width:20px; height:0; border-top:2px solid #d4380d;"></span> Upstream (when clicked)</span>
+        <span style="display:flex; align-items:center; gap:4px;"><span style="width:20px; height:0; border-top:2px solid #1a7f37;"></span> Downstream (when clicked)</span>
     </div>
     <!-- Graph area -->
     <div id="graph-container">
@@ -995,11 +1000,26 @@ function highlightPath(course, allCourses, links) {
         .classed('highlighted', d => d.id === course.id)
         .classed('dimmed', d => !related.has(d.id));
 
+    // Upstream subgraph = clicked course + all its prereq ancestors
+    const upstreamSubgraph = new Set([course.id, ...upstream]);
+    // Downstream subgraph = clicked course + all courses that depend on it
+    const downstreamSubgraph = new Set([course.id, ...downstream]);
+
     d3.selectAll('.link')
-        .classed('highlighted', function() {
+        .classed('highlighted', false)
+        .classed('highlighted-upstream', function() {
             const s = this.getAttribute('data-source');
             const t = this.getAttribute('data-target');
-            return related.has(s) && related.has(t);
+            // A link is upstream if BOTH endpoints are in the upstream chain
+            return upstreamSubgraph.has(s) && upstreamSubgraph.has(t);
+        })
+        .classed('highlighted-downstream', function() {
+            const s = this.getAttribute('data-source');
+            const t = this.getAttribute('data-target');
+            // A link is downstream if BOTH endpoints are in the downstream chain
+            // and NOT already in the upstream chain (to avoid the clicked course's own edges being both)
+            const isUp = upstreamSubgraph.has(s) && upstreamSubgraph.has(t);
+            return !isUp && downstreamSubgraph.has(s) && downstreamSubgraph.has(t);
         })
         .classed('dimmed', function() {
             const s = this.getAttribute('data-source');
@@ -1150,10 +1170,10 @@ function updateDetail(course, schoolKey) {
         html += `</div>`;
     }
 
-    // After-requisites (courses that depend on this one)
+    // Post-requisites (courses that depend on this one)
     const afterReqs = school.courses.filter(c => c.prereqs.includes(course.id) || c.coreqs.includes(course.id));
     if (afterReqs.length > 0) {
-        html += `<div class="detail-label">After-Requisites (courses that need this)</div><div class="detail-value">`;
+        html += `<div class="detail-label">Post-Requisites (courses that need this)</div><div class="detail-value">`;
         afterReqs.forEach(c => {
             html += `<div style="font-size:12px; margin:1px 0; cursor:pointer; color:#1a7f37;" onclick="clickCourseById('${c.id}','${schoolKey}')">&darr; ${c.label} (${c.name})</div>`;
         });
