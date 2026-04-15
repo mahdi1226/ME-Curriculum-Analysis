@@ -890,14 +890,17 @@ function renderSchool(schoolKey) {
                 return `M${rightEdge},${sy} L${rightEdge + offset},${sy} L${rightEdge + offset},${ty} L${rightEdge},${ty}`;
             }
             // Co-requisites in different semesters: orthogonal step (Z shape)
+            // Always draw from the leftmost box to the rightmost box regardless of
+            // which is "source"/"target" — co-reqs are bidirectional.
             if (d.type === 'corequisite') {
-                const sx = s.x + NODE_WIDTH;               // right edge of source box
-                const sy = s.y + NODE_HEIGHT / 2;          // middle-right of source
-                const tx = t.x;                            // left edge of target box
-                const ty = t.y + NODE_HEIGHT / 2;          // middle-left of target
-                const midx = (sx + tx) / 2;                // horizontal midpoint between boxes
-                // Path: out of box1 → horizontal → vertical → horizontal → into box2
-                return `M${sx},${sy} L${midx},${sy} L${midx},${ty} L${tx},${ty}`;
+                const left  = s.x < t.x ? s : t;
+                const right = s.x < t.x ? t : s;
+                const lx = left.x + NODE_WIDTH;            // right edge of left box
+                const ly = left.y + NODE_HEIGHT / 2;       // middle-right of left
+                const rx = right.x;                        // left edge of right box
+                const ry = right.y + NODE_HEIGHT / 2;      // middle-left of right
+                const midx = (lx + rx) / 2;
+                return `M${lx},${ly} L${midx},${ly} L${midx},${ry} L${rx},${ry}`;
             }
             // Prerequisites and cross-semester links: curved spline
             const sx = s.x + NODE_WIDTH;
