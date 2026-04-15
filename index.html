@@ -359,7 +359,7 @@ const schools = {
             { id: "PHYS2111", label: "PHYS 2111/L", name: "Physics I: Mechanics & Heat", credits: 5, cat: "physics", sem: 2, prereqs: ["MATH1800"], coreqs: [] },
             { id: "GE_HIST", label: "Core Hist/Gov", name: "American History & Government", credits: 3, cat: "gen_ed", sem: 2, prereqs: [], coreqs: [] },
             // Year 2 Fall
-            { id: "EENG2310", label: "EENG 2310", name: "Circuit Analysis I", credits: 3, cat: "electrical", sem: 3, prereqs: ["PHYS2112","MATH2000"], coreqs: [] },
+            { id: "EENG2310", label: "EENG 2310", name: "Circuit Analysis I", credits: 3, cat: "electrical", sem: 3, prereqs: ["PHYS2111","MATH1900"], coreqs: ["MATH2020"] },
             { id: "ENGR2310", label: "ENGR 2310", name: "Statics", credits: 3, cat: "engr_core", sem: 3, prereqs: ["MATH1900","PHYS2111"], coreqs: [] },
             { id: "MATH2000", label: "MATH 2000", name: "Calculus III", credits: 5, cat: "math", sem: 3, prereqs: ["MATH1900"], coreqs: [] },
             { id: "PHYS2112", label: "PHYS 2112/L", name: "Physics II: E&M, Optics", credits: 5, cat: "physics", sem: 3, prereqs: ["PHYS2111","MATH1900"], coreqs: [] },

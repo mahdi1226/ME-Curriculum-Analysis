@@ -57,6 +57,25 @@ Current UMSL program has 4 fixed upper-division ME courses (4440, 4450, 4460, 44
 
 ## B. Important Improvements (Strengthen ABET Case)
 
+### 3.5 Catalog vs. 4-Year Plan Inconsistency (EENG 2310)
+**Problem:** EENG 2310 Circuit Analysis I catalog entry states prerequisites are:
+- MATH 1900 (Calc II)
+- PHYSICS 2111/2111L (Physics I)
+- **Concurrent enrollment in MATH 2020** (Differential Equations)
+
+However, the 4-year plan places:
+- EENG 2310 in Y2 Fall
+- MATH 2020 in Y2 Spring (one semester LATER)
+
+A student following the 4-year plan literally cannot satisfy the concurrent MATH 2020 requirement. ABET evaluators check exactly this kind of catalog-vs-sequence consistency.
+
+**Options to resolve:**
+- Move MATH 2020 to Y2 Fall (alongside MATH 2000), or
+- Move EENG 2310 to Y2 Spring, or
+- Update the EENG 2310 catalog entry to remove the concurrent requirement
+
+**Recommendation:** Move MATH 2020 to Y2 Fall. This also better supports MENG 3350 and MENG 3370 prerequisites in Y3 Fall.
+
 ### 4. Capstone Design Credits
 UMSL capstone is 2+2=4 credits. Peers:
 - S&T: 3 credits (2-semester)
