@@ -880,13 +880,14 @@ function renderSchool(schoolKey) {
             const s = positions[d.source];
             const t = positions[d.target];
             if (!s || !t) return '';
-            // Co-requisites: vertical straight line between boxes in the same semester
+            // Co-requisites: bracket-style connector out of the right side of both boxes
             if (d.type === 'corequisite' && Math.abs(s.x - t.x) < 1) {
-                const x = s.x + NODE_WIDTH / 2; // center-x of both boxes
-                // Determine which is higher; draw from bottom of top box to top of bottom box
-                const topY = Math.min(s.y, t.y) + NODE_HEIGHT;
-                const botY = Math.max(s.y, t.y);
-                return `M${x},${topY} L${x},${botY}`;
+                const rightEdge = s.x + NODE_WIDTH;       // right edge of boxes
+                const offset = 18;                         // how far right before turning
+                const sy = s.y + NODE_HEIGHT / 2;          // middle-right of source box
+                const ty = t.y + NODE_HEIGHT / 2;          // middle-right of target box
+                // Path: from right of box1 → right offset → vertical to box2 height → left into box2
+                return `M${rightEdge},${sy} L${rightEdge + offset},${sy} L${rightEdge + offset},${ty} L${rightEdge},${ty}`;
             }
             // Prerequisites and cross-semester links: curved spline
             const sx = s.x + NODE_WIDTH;
