@@ -35,11 +35,11 @@ Edge attributes: `type` (prerequisite / corequisite)
 
 | School | Type | Total Credits | ME Courses | Prereq Edges |
 |--------|------|---------------|------------|-------------|
-| **UMSL** | Public (UM System) | 125 | 42 | 38 |
-| **Missouri S&T** | Public (UM System) | 128 | 44 | 64 |
-| **SIUE** | Public (SIU System) | 129 | 44 | 52 |
-| **SLU** | Private (Jesuit) | 129 | 42 | 34 |
-| **WashU** | Private (McKelvey) | 120 | 36 | 42 |
+| **UMSL** | Public (UM System) | 125 | 42 | 39 |
+| **Missouri S&T** | Public (UM System) | 128 | 46 | 61 |
+| **SIUE** | Public (SIU System) | 129 | 41 | 41 |
+| **SLU** | Private (Jesuit) | 129 | 43 | 34 |
+| **WashU** | Private (McKelvey) | 120 | 46 | 44 |
 
 ## Key Findings
 
