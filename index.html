@@ -880,14 +880,24 @@ function renderSchool(schoolKey) {
             const s = positions[d.source];
             const t = positions[d.target];
             if (!s || !t) return '';
-            // Co-requisites: bracket-style connector out of the right side of both boxes
+            // Co-requisites in same semester: bracket-style connector on right side of boxes
             if (d.type === 'corequisite' && Math.abs(s.x - t.x) < 1) {
                 const rightEdge = s.x + NODE_WIDTH;       // right edge of boxes
                 const offset = 18;                         // how far right before turning
                 const sy = s.y + NODE_HEIGHT / 2;          // middle-right of source box
                 const ty = t.y + NODE_HEIGHT / 2;          // middle-right of target box
-                // Path: from right of box1 → right offset → vertical to box2 height → left into box2
+                // Path: right of box1 → right offset → vertical to box2 height → left into box2
                 return `M${rightEdge},${sy} L${rightEdge + offset},${sy} L${rightEdge + offset},${ty} L${rightEdge},${ty}`;
+            }
+            // Co-requisites in different semesters: orthogonal step (Z shape)
+            if (d.type === 'corequisite') {
+                const sx = s.x + NODE_WIDTH;               // right edge of source box
+                const sy = s.y + NODE_HEIGHT / 2;          // middle-right of source
+                const tx = t.x;                            // left edge of target box
+                const ty = t.y + NODE_HEIGHT / 2;          // middle-left of target
+                const midx = (sx + tx) / 2;                // horizontal midpoint between boxes
+                // Path: out of box1 → horizontal → vertical → horizontal → into box2
+                return `M${sx},${sy} L${midx},${sy} L${midx},${ty} L${tx},${ty}`;
             }
             // Prerequisites and cross-semester links: curved spline
             const sx = s.x + NODE_WIDTH;
