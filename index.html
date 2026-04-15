@@ -946,16 +946,20 @@ function highlightPath(course, allCourses, links) {
     const downstream = new Set();
 
     function findUpstream(id) {
+        if (upstream.has(id)) return; // already visited - prevents cycles from bidirectional coreqs
         const c = allCourses.find(x => x.id === id);
         if (!c) return;
         c.prereqs.forEach(p => { upstream.add(p); findUpstream(p); });
         c.coreqs.forEach(p => { upstream.add(p); findUpstream(p); });
     }
     function findDownstream(id) {
+        if (downstream.has(id)) return; // already visited - prevents cycles
         allCourses.forEach(c => {
             if (c.prereqs.includes(id) || c.coreqs.includes(id)) {
-                downstream.add(c.id);
-                findDownstream(c.id);
+                if (!downstream.has(c.id)) {
+                    downstream.add(c.id);
+                    findDownstream(c.id);
+                }
             }
         });
     }
